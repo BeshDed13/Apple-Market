@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 struct Category: Codable, Identifiable {
     let id: String
@@ -14,13 +15,13 @@ struct Category: Codable, Identifiable {
 }
 
 struct Product: Codable, Identifiable {
-    let id: String
+    @DocumentID var id: String?
+    let isAvailable: Bool
     let categoryId: String
     let name: String
     let description: String
-    let baseImages: [String]
-    
-    let variants: [ProductVariant]
+    let baseImage: String
+    let minPrice: String
 }
 
 enum OptionType: String, Codable {
@@ -29,15 +30,14 @@ enum OptionType: String, Codable {
     case connectivity
     case chip
     case ram
-    case size
+    case diagonal
 }
 
 
 struct ProductVariant: Codable, Identifiable {
-    let id: String
+    @DocumentID var id: String?
     let price: Int
     let stock: Int
     let images: [String]
-    
     let attributes: [String: String]
 }

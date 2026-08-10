@@ -8,6 +8,7 @@
 import Foundation
 
 struct CatalogCategory {
+    let id: String
     let title: String
     let imageName: String
 }

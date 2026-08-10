@@ -9,13 +9,15 @@ import UIKit
 
 final class CatalogViewController: UIViewController {
     
+    var onCategoryTapped: ((CatalogCategory) -> Void)?
+    
     private let categories: [CatalogCategory] = [
-        .init(title: "iPhone", imageName: "iphone"),
-        .init(title: "iPad", imageName: "ipad"),
-        .init(title: "Mac", imageName: "mac"),
-        .init(title: "Apple Watch", imageName: "applewatch"),
-        .init(title: "AirPods", imageName: "airpods"),
-        .init(title: "Аксессуары", imageName: "accessories"),
+        .init(id: "iphone", title: "iPhone", imageName: "iphone"),
+        .init(id: "ipad", title: "iPad", imageName: "ipad"),
+        .init(id: "mac", title: "Mac", imageName: "mac"),
+        .init(id: "watch", title: "Apple Watch", imageName: "applewatch"),
+        .init(id: "airpods", title: "AirPods", imageName: "airpods"),
+        .init(id: "accessories", title: "Аксессуары", imageName: "accessories")
     ]
     
     private lazy var collectionView: UICollectionView = {
@@ -109,7 +111,6 @@ extension CatalogViewController: UICollectionViewDelegate {
         didSelectItemAt indexPath: IndexPath
     ) {
         let category = categories[indexPath.item]
-
-        print(category.title)
+        onCategoryTapped?(category)
     }
 }

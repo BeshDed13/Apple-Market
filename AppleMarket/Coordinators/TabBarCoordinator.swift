@@ -21,6 +21,8 @@ final class TabBarCoordinator: Coordinator {
     private let profileFactory: ProfileFactory
     private let loginFactory: LoginFactory
     private let signUpFactory: SignUpFactory
+    private let categoryFactory: CategoryFactory
+    private let productFactory: ProductFactory
     
     init(
         navigationController: UINavigationController,
@@ -30,7 +32,9 @@ final class TabBarCoordinator: Coordinator {
         cartFactory: CartFactory,
         profileFactory: ProfileFactory,
         loginFactory: LoginFactory,
-        signUpFactory: SignUpFactory
+        signUpFactory: SignUpFactory,
+        categoryFactory: CategoryFactory,
+        productFactory: ProductFactory
     ) {
         self.navigationController = navigationController
         self.mainFactory = mainFactory
@@ -40,6 +44,8 @@ final class TabBarCoordinator: Coordinator {
         self.profileFactory = profileFactory
         self.loginFactory = loginFactory
         self.signUpFactory = signUpFactory
+        self.categoryFactory = categoryFactory
+        self.productFactory = productFactory
     }
     func start() {
         
@@ -56,7 +62,9 @@ final class TabBarCoordinator: Coordinator {
         )
         let catalogCoordinator = CatalogCoordinator(
             navigationController: catalogNC,
-            catalogFactory: catalogFactory
+            catalogFactory: catalogFactory,
+            categoryFactory: categoryFactory,
+            productFactory: productFactory
         )
         let favoritesCoordinator = FavoritesCoordinator(
             navigationController: favoritesNC,

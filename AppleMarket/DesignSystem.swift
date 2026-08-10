@@ -30,6 +30,7 @@ enum DesignSystem {
         static let medium: CGFloat = 8
         static let large: CGFloat = 16
         static let xlarge: CGFloat = 25
+        static let cellRadius: CGFloat = 20
     }
     
     

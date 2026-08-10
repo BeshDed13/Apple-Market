@@ -27,9 +27,9 @@ final class CatalogCategoryCell: UICollectionViewCell {
 
     private func setupUI() {
 
-        backgroundColor = DesignSystem.Colors.secondary
+        backgroundColor = DesignSystem.Colors.primary
 
-        layer.cornerRadius = 20
+        layer.cornerRadius = DesignSystem.Radius.cellRadius
         layer.cornerCurve = .continuous
 
         layer.shadowColor = UIColor.black.cgColor
