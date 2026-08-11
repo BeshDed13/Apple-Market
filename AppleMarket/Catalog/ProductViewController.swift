@@ -8,6 +8,24 @@
 import UIKit
 
 final class ProductViewController: UIViewController {
+    
+    private let headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.systemGray6
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "appleMarketLogo")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    var onLoginTapped: (() -> Void)?
+    var onSignUpTapped: (() -> Void)?
 
     private let viewModel: ProductViewModelProtocol
     private let imageLoader: ImageLoaderProtocol
@@ -50,6 +68,24 @@ final class ProductViewController: UIViewController {
         return stack
     }()
     
+    private let addToCartButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("В корзину", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = DesignSystem.Radius.xlarge
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let cartQuantityView: CartQuantityView = {
+        let view = CartQuantityView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        return view
+    }()
+    
     init(
         viewModel: ProductViewModelProtocol,
         imageLoader: ImageLoaderProtocol
@@ -68,6 +104,7 @@ final class ProductViewController: UIViewController {
 
         setupUI()
         setupConstraints()
+        setupActions()
         bindViewModel()
 
         viewModel.loadProduct()
@@ -81,10 +118,23 @@ final class ProductViewController: UIViewController {
         view.addSubview(descriptionLabel)
         view.addSubview(attributesStackView)
         view.addSubview(priceLabel)
+        view.addSubview(addToCartButton)
+        view.addSubview(cartQuantityView)
+        view.addSubview(headerView)
+        headerView.addSubview(logoImageView)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 64),
+            
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             imageView.widthAnchor.constraint(equalToConstant: 100),
@@ -102,10 +152,39 @@ final class ProductViewController: UIViewController {
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            priceLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+            priceLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),
             priceLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            priceLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            priceLabel.trailingAnchor.constraint(equalTo: addToCartButton.leadingAnchor, constant: 16),
+            
+            addToCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            addToCartButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),
+            addToCartButton.heightAnchor.constraint(equalToConstant: 50),
+            addToCartButton.widthAnchor.constraint(equalToConstant: 150),
+            
+            cartQuantityView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            cartQuantityView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),
+            cartQuantityView.heightAnchor.constraint(equalToConstant: 50),
+            cartQuantityView.widthAnchor.constraint(equalToConstant: 150),
+            
         ])
+    }
+    
+    private func setupActions() {
+
+        addToCartButton.addAction(
+            UIAction { [weak self] _ in
+                self?.viewModel.increaseCartQuantity()
+            },
+            for: .touchUpInside
+        )
+
+        cartQuantityView.onMinusTapped = { [weak self] in
+            self?.viewModel.decreaseCartQuantity()
+        }
+
+        cartQuantityView.onPlusTapped = { [weak self] in
+            self?.viewModel.increaseCartQuantity()
+        }
     }
     
     private func bindViewModel() {
@@ -120,6 +199,14 @@ final class ProductViewController: UIViewController {
 
         viewModel.onError = { [weak self] error in
             self?.showError(error)
+        }
+        
+        viewModel.onCartUpdated = { [weak self] in
+            self?.updateCartButton()
+        }
+        
+        viewModel.onAuthRequired = { [weak self] in
+            self?.showAuthAlert()
         }
     }
     
@@ -138,6 +225,74 @@ final class ProductViewController: UIViewController {
         )
 
         present(alert, animated: true)
+    }
+    
+    private func showAuthAlert() {
+
+        let alert = UIAlertController(
+            title: "Требуется авторизация",
+            message: "Чтобы добавить товар в корзину, войдите в аккаунт или зарегистрируйтесь.",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(
+            UIAlertAction(
+                title: "Войти",
+                style: .default
+            ) { [weak self] _ in
+
+                self?.onLoginTapped?()
+            }
+        )
+
+        alert.addAction(
+            UIAlertAction(
+                title: "Регистрация",
+                style: .default
+            ) { [weak self] _ in
+
+                self?.onSignUpTapped?()
+            }
+        )
+
+        alert.addAction(
+            UIAlertAction(
+                title: "Отмена",
+                style: .cancel
+            )
+        )
+
+        present(alert, animated: true)
+    }
+    
+    private func updateCartButton() {
+
+        guard let variant = viewModel.selectedVariant else {
+            addToCartButton.isHidden = false
+            cartQuantityView.isHidden = true
+            addToCartButton.isEnabled = false
+            return
+        }
+
+        let quantity = viewModel.cartQuantity
+
+        if quantity == 0 {
+
+            addToCartButton.isHidden = false
+            cartQuantityView.isHidden = true
+
+            addToCartButton.isEnabled = variant.stock > 0
+
+        } else {
+
+            addToCartButton.isHidden = true
+            cartQuantityView.isHidden = false
+
+            cartQuantityView.configure(
+                quantity: quantity,
+                canIncrease: quantity < variant.stock
+            )
+        }
     }
     
     private func updateUI() {

@@ -19,7 +19,9 @@ final class ProductFactory {
 
         let viewModel = ProductViewModel(
             catalogService: container.catalogService,
-            productId: productId
+            productId: productId,
+            cartService: container.cartService,
+            authService: container.authService
         )
 
         return ProductViewController(

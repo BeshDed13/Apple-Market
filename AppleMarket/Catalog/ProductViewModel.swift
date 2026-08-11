@@ -28,6 +28,13 @@ protocol ProductViewModelProtocol: AnyObject {
     func loadProduct()
     func selectAttribute(type: String, value: String)
     func attributeOptions(for type: String) -> [AttributeOption]
+    
+    var cartQuantity: Int { get }
+    var onCartUpdated: (() -> Void)? { get set }
+    var onAuthRequired: (() -> Void)? { get set }
+    
+    func increaseCartQuantity()
+    func decreaseCartQuantity()
 }
 
 final class ProductViewModel: ProductViewModelProtocol {
@@ -35,9 +42,15 @@ final class ProductViewModel: ProductViewModelProtocol {
     var onProductUpdated: (() -> Void)?
     var onVariantSelected: (() -> Void)?
     var onError: ((Error) -> Void)?
+    var onCartUpdated: (() -> Void)?
+    var onAuthRequired: (() -> Void)?
+
+    private(set) var cartQuantity: Int = 0
 
     private let catalogService: CatalogServiceProtocol
     private let productId: String
+    private let cartService: CartServiceProtocol
+    private let authService: AuthServiceProtocol
 
     private(set) var product: Product?
     private(set) var variants: [ProductVariant] = []
@@ -46,10 +59,14 @@ final class ProductViewModel: ProductViewModelProtocol {
 
     init(
         catalogService: CatalogServiceProtocol,
-        productId: String
+        productId: String,
+        cartService: CartServiceProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.catalogService = catalogService
         self.productId = productId
+        self.cartService = cartService
+        self.authService = authService
     }
 
     func loadProduct() {
@@ -85,7 +102,8 @@ final class ProductViewModel: ProductViewModelProtocol {
                         self?.selectedVariant = firstVariant
                         self?.selectedAttributes = firstVariant.attributes
                     }
-
+                    
+                    self?.loadCartQuantity()
                     self?.onProductUpdated?()
 
                 case .failure(let error):
@@ -108,6 +126,41 @@ final class ProductViewModel: ProductViewModelProtocol {
         }
 
         onVariantSelected?()
+
+        loadCartQuantity()
+    }
+    
+    private func loadCartQuantity() {
+
+        guard case .authorized = authService.authState else {
+            cartQuantity = 0
+            onCartUpdated?()
+            return
+        }
+
+        guard let variantId = selectedVariant?.id else {
+            cartQuantity = 0
+            onCartUpdated?()
+            return
+        }
+
+        cartService.fetchQuantity(
+            variantId: variantId
+        ) { [weak self] result in
+
+            DispatchQueue.main.async {
+
+                switch result {
+
+                case .success(let quantity):
+                    self?.cartQuantity = quantity
+                    self?.onCartUpdated?()
+
+                case .failure(let error):
+                    self?.onError?(error)
+                }
+            }
+        }
     }
 
     func attributeOptions(
@@ -150,5 +203,91 @@ final class ProductViewModel: ProductViewModelProtocol {
                     isAvailable: isAvailable
                 )
             }
+    }
+    
+    func increaseCartQuantity() {
+
+        guard case .authorized = authService.authState else {
+            onAuthRequired?()
+            return
+        }
+
+        guard let variant = selectedVariant else {
+            return
+        }
+
+        guard cartQuantity < variant.stock else {
+            return
+        }
+
+        if cartQuantity == 0 {
+
+            cartService.addToCart(
+                productId: productId,
+                variant: variant
+            ) { [weak self] result in
+
+                DispatchQueue.main.async {
+                    switch result {
+
+                    case .success:
+                        self?.loadCartQuantity()
+
+                    case .failure(let error):
+                        self?.onError?(error)
+                    }
+                }
+            }
+
+        } else {
+
+            cartService.increaseQuantity(
+                variant: variant
+            ) { [weak self] result in
+
+                DispatchQueue.main.async {
+                    switch result {
+
+                    case .success:
+                        self?.loadCartQuantity()
+
+                    case .failure(let error):
+                        self?.onError?(error)
+                    }
+                }
+            }
+        }
+    }
+    
+    func decreaseCartQuantity() {
+
+        guard case .authorized = authService.authState else {
+            onAuthRequired?()
+            return
+        }
+
+        guard let variantId = selectedVariant?.id else {
+            return
+        }
+
+        guard cartQuantity > 0 else {
+            return
+        }
+
+        cartService.decreaseQuantity(
+            variantId: variantId
+        ) { [weak self] result in
+
+            DispatchQueue.main.async {
+                switch result {
+
+                case .success:
+                    self?.loadCartQuantity()
+
+                case .failure(let error):
+                    self?.onError?(error)
+                }
+            }
+        }
     }
 }

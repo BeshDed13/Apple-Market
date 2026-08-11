@@ -55,7 +55,7 @@ final class AuthCoordinator: Coordinator {
     private func finish() {
         guard let navigationController else { return }
 
-        navigationController.popToRootViewController(animated: true)
+        navigationController.popViewController(animated: true)
         onFinish?()
     }
 }

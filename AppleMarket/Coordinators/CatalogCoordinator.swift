@@ -9,6 +9,9 @@ import UIKit
 
 final class CatalogCoordinator: Coordinator {
     
+    var onLoginRequested: (() -> Void)?
+    var onSignUpRequested: (() -> Void)?
+    
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
     
@@ -52,9 +55,27 @@ final class CatalogCoordinator: Coordinator {
     }
     
     func showProduct(_ product: Product) {
-        guard let productId = product.id else { return }
-        let vc = productFactory.make(productId: productId)
-        navigationController.pushViewController(vc, animated: true)
+
+        guard let productId = product.id else {
+            return
+        }
+
+        let vc = productFactory.make(
+            productId: productId
+        )
+
+        vc.onLoginTapped = { [weak self] in
+            self?.onLoginRequested?()
+        }
+
+        vc.onSignUpTapped = { [weak self] in
+            self?.onSignUpRequested?()
+        }
+
+        navigationController.pushViewController(
+            vc,
+            animated: true
+        )
     }
 }
 

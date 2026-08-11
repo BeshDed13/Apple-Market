@@ -13,6 +13,21 @@ final class LoginViewController: UIViewController {
     
     private let viewModel: LoginViewModelProtocol
     
+    private let headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.systemGray6
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "appleMarketLogo")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let emailTextField = CustomTextField()
     private let passwordTextField = CustomTextField()
     
@@ -46,6 +61,8 @@ final class LoginViewController: UIViewController {
         view.addSubview(emailTextField)
         view.addSubview(passwordTextField)
         view.addSubview(loginButton)
+        view.addSubview(headerView)
+        headerView.addSubview(logoImageView)
         
         emailTextField.placeholder = "Почта"
         passwordTextField.placeholder = "Пароль"
@@ -54,6 +71,15 @@ final class LoginViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 64),
+            
             emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),

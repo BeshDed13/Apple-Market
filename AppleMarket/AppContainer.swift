@@ -14,12 +14,16 @@ final class AppContainer {
     let currentUserManager: CurrentUserManagerProtocol
     let catalogService: CatalogServiceProtocol
     let imageLoader: ImageLoaderProtocol
+    let cartService: CartServiceProtocol
     
     init() {
-        authService = AuthService()
-        userService = UserService()
-        currentUserManager = CurrentUserManager()
-        catalogService = CatalogService()
-        imageLoader = ImageLoader()
+        let userService = UserService()
+        
+        self.userService = userService
+        self.authService = AuthService(userService: userService)
+        self.currentUserManager = CurrentUserManager()
+        self.catalogService = CatalogService()
+        self.imageLoader = ImageLoader()
+        self.cartService = CartService()
     }
 }

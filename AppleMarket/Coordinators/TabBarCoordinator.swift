@@ -84,6 +84,14 @@ final class TabBarCoordinator: Coordinator {
             signUpFactory: signUpFactory
         )
         
+        catalogCoordinator.onLoginRequested = { [weak authCoordinator] in
+            authCoordinator?.showLogin(from: catalogNC)
+        }
+
+        catalogCoordinator.onSignUpRequested = { [weak authCoordinator] in
+            authCoordinator?.showSignUp(from: catalogNC)
+        }
+        
         cartCoordinator.onLoginRequested = { [weak authCoordinator] in
             authCoordinator?.showLogin(from: cartNC)
         }
