@@ -1,0 +1,415 @@
+//
+//  CartViewController.swift
+//  AppleMarket
+//
+//  Created by Дмитрий Ильинский on 24.06.2026.
+//
+
+import UIKit
+
+final class CartViewController: UIViewController {
+    
+    var onLoginTapped: (() -> Void)?
+    var onSignUpTapped: (() -> Void)?
+    
+    private let viewModel: CartViewModelProtocol
+    private let imageLoader: ImageLoaderProtocol
+    
+    private let headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.systemGray6
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "appleMarketLogo")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "В вашей корзине отсутствуют товары. Попробуйте поискать что-нибудь в каталоге!"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.contentInset = UIEdgeInsets(
+            top: 12,
+            left: 0,
+            bottom: 12,
+            right: 0
+        )
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
+    private let totalLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let authenticationView = AuthenticationView()
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    init(
+        viewModel: CartViewModelProtocol,
+        imageLoader: ImageLoaderProtocol
+    ) {
+        self.viewModel = viewModel
+        self.imageLoader = imageLoader
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupUI()
+        setupConstraints()
+        setupActions()
+        setupTableView()
+        
+        viewModel.onStateChanged = { [weak self] in
+            self?.updateUI()
+        }
+        
+        viewModel.onCartUpdated = { [weak self] in
+            guard let self else { return }
+            
+            tableView.reloadData()
+            totalLabel.text = "Итого: \(viewModel.totalPrice) ₽"
+        }
+        
+        updateUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        Task {
+            await viewModel.loadCart()
+        }
+    }
+    
+    private func setupUI() {
+        
+        navigationItem.title = "Корзина"
+        view.backgroundColor = DesignSystem.Colors.primary
+        
+        view.addSubview(emptyLabel)
+        view.addSubview(tableView)
+        view.addSubview(totalLabel)
+        view.addSubview(authenticationView)
+        view.addSubview(activityIndicator)
+        
+        view.addSubview(headerView)
+        headerView.addSubview(logoImageView)
+        
+        authenticationView.translatesAutoresizingMaskIntoConstraints = false
+        
+        authenticationView.configure(
+            title: "Войдите или зарегистрируйтесь, чтобы просматривать корзину"
+        )
+    }
+    
+    private func setupTableView() {
+        
+        tableView.register(
+            CartCell.self,
+            forCellReuseIdentifier: CartCell.reuseIdentifier
+        )
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        tableView.rowHeight = 130
+    }
+    
+    private func setupConstraints() {
+        
+        NSLayoutConstraint.activate([
+            
+            // Header
+            
+            headerView.topAnchor.constraint(
+                equalTo: view.topAnchor
+            ),
+            headerView.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            headerView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            headerView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            
+            logoImageView.centerXAnchor.constraint(
+                equalTo: headerView.centerXAnchor
+            ),
+            logoImageView.centerYAnchor.constraint(
+                equalTo: headerView.centerYAnchor
+            ),
+            logoImageView.heightAnchor.constraint(
+                equalToConstant: 64
+            ),
+            
+            // Empty
+            
+            emptyLabel.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            emptyLabel.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: 24
+            ),
+            emptyLabel.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -24
+            ),
+            emptyLabel.bottomAnchor.constraint(
+                equalTo: totalLabel.topAnchor
+            ),
+            
+            // Table
+            
+            tableView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            tableView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            tableView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            tableView.bottomAnchor.constraint(
+                equalTo: totalLabel.topAnchor
+            ),
+            
+            // Total
+            
+            totalLabel.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: 16
+            ),
+            totalLabel.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -16
+            ),
+            totalLabel.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -12
+            ),
+            totalLabel.heightAnchor.constraint(
+                equalToConstant: 30
+            ),
+            
+            // Authentication
+            
+            authenticationView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: 48
+            ),
+            authenticationView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: 48
+            ),
+            authenticationView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -48
+            ),
+            authenticationView.centerXAnchor.constraint(
+                equalTo: view.centerXAnchor
+            ),
+            
+            // Activity
+            
+            activityIndicator.centerXAnchor.constraint(
+                equalTo: view.centerXAnchor
+            ),
+            activityIndicator.centerYAnchor.constraint(
+                equalTo: view.centerYAnchor
+            )
+        ])
+    }
+    
+    private func setupActions() {
+        
+        authenticationView.onLoginTapped = { [weak self] in
+            self?.onLoginTapped?()
+        }
+        
+        authenticationView.onSignUpTapped = { [weak self] in
+            self?.onSignUpTapped?()
+        }
+    }
+    
+    private func updateUI() {
+        
+        switch viewModel.authState {
+            
+        case .loading:
+            
+            activityIndicator.startAnimating()
+            
+            authenticationView.isHidden = true
+            tableView.isHidden = true
+            emptyLabel.isHidden = true
+            totalLabel.isHidden = true
+            
+        case .guest:
+            
+            activityIndicator.stopAnimating()
+            
+            authenticationView.isHidden = false
+            tableView.isHidden = true
+            emptyLabel.isHidden = true
+            totalLabel.isHidden = true
+            
+        case .authorized:
+            
+            activityIndicator.stopAnimating()
+            
+            authenticationView.isHidden = true
+            
+            let isEmpty = viewModel.cartProducts.isEmpty
+            
+            tableView.isHidden = isEmpty
+            emptyLabel.isHidden = !isEmpty
+            totalLabel.isHidden = isEmpty
+            
+            if !isEmpty {
+                tableView.reloadData()
+                totalLabel.text = "Итого: \(viewModel.totalPrice) ₽"
+            }
+        }
+    }
+    
+    private func showDeleteConfirmation(at indexPath: IndexPath) {
+        
+        guard indexPath.row < viewModel.cartProducts.count else {
+            return
+        }
+        
+        let item = viewModel.cartProducts[indexPath.row]
+        
+        let alert = UIAlertController(
+            title: "Удалить товар?",
+            message: "Вы действительно хотите удалить «\(item.product.name)» из корзины?",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(
+            UIAlertAction(
+                title: "Отмена",
+                style: .cancel
+            )
+        )
+        
+        alert.addAction(
+            UIAlertAction(
+                title: "Удалить",
+                style: .destructive
+            ) { [weak self] _ in
+                
+                self?.viewModel.removeItem(at: indexPath.row)
+            }
+        )
+        
+        present(alert, animated: true)
+    }
+}
+
+extension CartViewController: UITableViewDataSource {
+    
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        viewModel.cartProducts.count
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: CartCell.reuseIdentifier,
+            for: indexPath
+        ) as? CartCell else {
+            return UITableViewCell()
+        }
+        
+        let item = viewModel.cartProducts[indexPath.row]
+        
+        cell.configure(
+            with: item,
+            imageLoader: imageLoader
+        )
+        
+        cell.onIncreaseTapped = { [weak self] in
+            self?.viewModel.increaseQuantity(at: indexPath.row)
+        }
+        
+        cell.onDecreaseTapped = { [weak self] in
+            self?.viewModel.decreaseQuantity(at: indexPath.row)
+        }
+        
+        return cell
+    }
+}
+
+extension CartViewController: UITableViewDelegate {
+    
+    func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: nil
+        ) { [weak self] _, _, completion in
+            
+            self?.showDeleteConfirmation(at: indexPath)
+            
+            completion(true)
+        }
+        
+        deleteAction.image = UIImage(
+            systemName: "trash"
+        )
+        
+        let configuration = UISwipeActionsConfiguration(
+            actions: [deleteAction]
+        )
+        
+        configuration.performsFirstActionWithFullSwipe = false
+        
+        return configuration
+    }
+}

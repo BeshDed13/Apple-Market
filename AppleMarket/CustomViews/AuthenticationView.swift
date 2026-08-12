@@ -12,6 +12,8 @@ final class AuthenticationView: UIView {
     var onLoginTapped: (() -> Void)?
     var onSignUpTapped: (() -> Void)?
     
+    private let cardView = CardView()
+    
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DesignSystem.Fonts.body
@@ -22,7 +24,6 @@ final class AuthenticationView: UIView {
     }()
     
     private let loginButton = LoginButton()
-    
     private let signUpButton = SignUpButton()
     
     override init(frame: CGRect) {
@@ -42,37 +43,51 @@ final class AuthenticationView: UIView {
     }
     
     private func setupUI() {
-        addSubview(titleLabel)
-        addSubview(loginButton)
-        addSubview(signUpButton)
+        addSubview(cardView)
         
-        layer.cornerRadius = DesignSystem.Radius.xlarge
-        layer.borderWidth = 2
-        layer.borderColor = UIColor.separator.cgColor
+        cardView.translatesAutoresizingMaskIntoConstraints = false
+        
+        cardView.addSubview(titleLabel)
+        cardView.addSubview(loginButton)
+        cardView.addSubview(signUpButton)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 32),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
+            cardView.topAnchor.constraint(equalTo: topAnchor),
+            cardView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            cardView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            cardView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            titleLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 32),
+            titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 32),
+            titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -32),
             
             loginButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32),
-            loginButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            loginButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            loginButton.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            loginButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
             
             signUpButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 16),
-            signUpButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            signUpButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            signUpButton.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            signUpButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
             signUpButton.heightAnchor.constraint(equalToConstant: 50),
-            signUpButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
-            ])
+            signUpButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16)
+        ])
     }
     
     private func setupActions() {
-        loginButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
-        signUpButton.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
+        loginButton.addTarget(
+            self,
+            action: #selector(loginTapped),
+            for: .touchUpInside
+        )
+        
+        signUpButton.addTarget(
+            self,
+            action: #selector(signUpTapped),
+            for: .touchUpInside
+        )
     }
     
     @objc private func loginTapped() {

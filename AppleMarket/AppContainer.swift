@@ -15,6 +15,7 @@ final class AppContainer {
     let catalogService: CatalogServiceProtocol
     let imageLoader: ImageLoaderProtocol
     let cartService: CartServiceProtocol
+    let favoritesService: FavoritesServiceProtocol
     
     init() {
         let userService = UserService()
@@ -25,5 +26,6 @@ final class AppContainer {
         self.catalogService = CatalogService()
         self.imageLoader = ImageLoader()
         self.cartService = CartService()
+        self.favoritesService = FavoritesService()
     }
 }

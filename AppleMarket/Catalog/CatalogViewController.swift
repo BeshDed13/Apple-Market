@@ -83,16 +83,16 @@ final class CatalogViewController: UIViewController {
     }
     
     private func createLayout() -> UICollectionViewLayout {
-        let spacing = DesignSystem.Spacing.medium
+        let spacing = DesignSystem.Spacing.small
         
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
-                                              heightDimension: .absolute(180)
+                                              heightDimension: .absolute(200)
                                               )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .absolute(180)
+                                               heightDimension: .absolute(200)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitems: [item, item])

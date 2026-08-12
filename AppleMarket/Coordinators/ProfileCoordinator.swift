@@ -16,13 +16,25 @@ final class ProfileCoordinator: Coordinator {
     var onSignUpRequested: (() -> Void)?
     
     private let profileFactory: ProfileFactory
+    private let ordersFactory: OrdersFactory
+    private let settingsFactory: SettingsFactory
+    private let supportFactory: SupportFactory
+    private let notificationsFactory: NotificationsFactory
     
     init(
         navigationController: UINavigationController,
-        profileFactory: ProfileFactory
+        profileFactory: ProfileFactory,
+        ordersFactory: OrdersFactory,
+        settingsFactory: SettingsFactory,
+        supportFactory: SupportFactory,
+        notificationsFactory: NotificationsFactory
     ) {
         self.navigationController = navigationController
         self.profileFactory = profileFactory
+        self.ordersFactory = ordersFactory
+        self.settingsFactory = settingsFactory
+        self.supportFactory = supportFactory
+        self.notificationsFactory = notificationsFactory
     }
     
     func start() {
@@ -35,6 +47,58 @@ final class ProfileCoordinator: Coordinator {
         vc.onSignUpTapped = { [weak self] in
             self?.onSignUpRequested?()
         }
+        
+        vc.onOrdersTapped = { [weak self] in
+            self?.showOrders( )
+        }
+        
+        vc.onSettingsTapped = { [weak self] in
+            self?.showSettings()
+        }
+        
+        vc.onSupportTapped = { [weak self] in
+            self?.showSupport( )
+        }
+        
+        vc.onNotificationsTapped = { [weak self] in
+            self?.showNotifications()
+        }
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showOrders() {
+        let vc = ordersFactory.make()
+
+        navigationController.pushViewController(
+            vc,
+            animated: true
+        )
+    }
+    
+    func showSettings() {
+        let vc = settingsFactory.make()
+
+        navigationController.pushViewController(
+            vc,
+            animated: true
+        )
+    }
+    
+    func showSupport() {
+        let vc = supportFactory.make()
+
+        navigationController.pushViewController(
+            vc,
+            animated: true
+        )
+    }
+    
+    func showNotifications() {
+        let vc = notificationsFactory.make()
+        
+        navigationController.pushViewController(
+            vc,
+            animated: true
+        )
     }
 }

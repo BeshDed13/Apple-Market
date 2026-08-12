@@ -21,7 +21,8 @@ final class ProductFactory {
             catalogService: container.catalogService,
             productId: productId,
             cartService: container.cartService,
-            authService: container.authService
+            authService: container.authService,
+            favoritesService: container.favoritesService
         )
 
         return ProductViewController(

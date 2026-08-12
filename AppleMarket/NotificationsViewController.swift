@@ -1,13 +1,13 @@
 //
-//  FavoritesViewController.swift
+//  NotificationsViewControlller.swift
 //  AppleMarket
 //
-//  Created by Дмитрий Ильинский on 24.06.2026.
+//  Created by Дмитрий Ильинский on 12.08.2026.
 //
 
 import UIKit
 
-final class FavoritesViewController: UIViewController {
+final class NotificationsViewController: UIViewController {
     
     private let headerView: UIView = {
         let view = UIView()
@@ -24,15 +24,6 @@ final class FavoritesViewController: UIViewController {
         return imageView
     }()
     
-    private let emptyLabel: UILabel = {
-        let label = UILabel()
-        label.text = "В избранном пока пусто. 😕"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,12 +32,11 @@ final class FavoritesViewController: UIViewController {
     }
     
     private func setupUI () {
-        view.addSubview(emptyLabel)
+        navigationItem.title = "Уведомления"
+        view.backgroundColor = DesignSystem.Colors.primary
+        
         view.addSubview(headerView)
         headerView.addSubview(logoImageView)
-        
-        navigationItem.title = "Избранное"
-        view.backgroundColor = DesignSystem.Colors.primary
     }
     
     private func setupConstraints () {
@@ -59,12 +49,7 @@ final class FavoritesViewController: UIViewController {
             logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
             logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 64),
-            
-            emptyLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            emptyLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
-    
+
 }

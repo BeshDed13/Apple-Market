@@ -33,6 +33,10 @@ final class AppCoordinator: Coordinator {
         let signUpFactory = SignUpFactory(container: container)
         let categoryFactory = CategoryFactory(container: container)
         let productFactory = ProductFactory(container: container)
+        let ordersFactory = OrdersFactory(container: container)
+        let settingsFactory = SettingsFactory(container: container)
+        let supportFactory = SupportFactory(container: container)
+        let notificationsFactory = NotificationsFactory(container: container)
         
         let tabBarCoordinator = TabBarCoordinator(
             navigationController: navigationController,
@@ -44,7 +48,11 @@ final class AppCoordinator: Coordinator {
             loginFactory: loginFactory,
             signUpFactory: signUpFactory,
             categoryFactory: categoryFactory,
-            productFactory: productFactory
+            productFactory: productFactory,
+            ordersFactory: ordersFactory,
+            settingsFactory: settingsFactory,
+            supportFactory: supportFactory,
+            notificationsFactory: notificationsFactory
             
         )
         childCoordinators.append(tabBarCoordinator)

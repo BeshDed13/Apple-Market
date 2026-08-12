@@ -172,7 +172,18 @@ extension CategoryViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         let product = viewModel.products[indexPath.item]
-        cell.configure(with: product)
+
+        cell.configure(
+            with: product,
+            isFavorite: product.id.map {
+                viewModel.isFavorite(productID: $0)
+            } ?? false
+        )
+
+        cell.onFavoriteTapped = { [weak self] productID in
+            self?.viewModel.toggleFavorite(productID: productID) ?? false
+        }
+
         return cell
     }
 }

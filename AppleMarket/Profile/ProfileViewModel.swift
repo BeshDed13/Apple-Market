@@ -14,6 +14,7 @@ protocol ProfileViewModelProtocol: AnyObject {
     var onStateChanged: (() -> Void)? { get set }
     
     func loadProfile()
+    func logout()
 }
 
 @MainActor
@@ -36,6 +37,7 @@ final class ProfileViewModel: ProfileViewModelProtocol {
     }
     
     func loadProfile() {
+        authState = .loading
 
         guard authService.isAuthorized,
               let userId = authService.currentUserID else {
@@ -56,6 +58,15 @@ final class ProfileViewModel: ProfileViewModelProtocol {
                     self.authState = .guest
                 }
             }
+        }
+    }
+    
+    func logout() {
+        do {
+            try authService.logout()
+            authState = .guest
+        } catch {
+            print("Logout error:", error)
         }
     }
 }

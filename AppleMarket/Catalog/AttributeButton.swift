@@ -20,7 +20,7 @@ final class AttributeButton: UIButton {
         isSelected: Bool,
         isAvailable: Bool
     ) {
-        layer.cornerRadius = DesignSystem.Radius.medium
+        layer.cornerRadius = DesignSystem.Radius.attributeButtonRadius
         layer.borderWidth = 0.5
         
         alpha = isAvailable ? 1 : 0.5

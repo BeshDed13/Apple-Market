@@ -53,7 +53,7 @@ final class CartQuantityView: UIView {
     private func setupUI() {
 
         backgroundColor = .systemBlue
-        layer.cornerRadius = DesignSystem.Radius.xlarge
+        layer.cornerRadius = DesignSystem.Radius.buttonRadius
 
         addSubview(minusButton)
         addSubview(quantityLabel)

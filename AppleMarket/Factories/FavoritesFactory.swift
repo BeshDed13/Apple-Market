@@ -16,6 +16,10 @@ final class FavoritesFactory {
     }
     
     func make() -> FavoritesViewController {
-        FavoritesViewController()
+        let viewModel = FavoritesViewModel(
+            favoritesService: container.favoritesService,
+            catalogService: container.catalogService,
+        )
+        return FavoritesViewController(viewModel: viewModel)
     }
 }

@@ -48,6 +48,7 @@ final class ProductViewController: UIViewController {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
+        label.textColor = DesignSystem.Colors.secondaryText
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -63,7 +64,7 @@ final class ProductViewController: UIViewController {
     private let attributesStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 20
+        stack.spacing = DesignSystem.Spacing.xsmall
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -72,9 +73,9 @@ final class ProductViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("В корзину", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = DesignSystem.Radius.xlarge
+        button.layer.cornerRadius = DesignSystem.Radius.buttonRadius
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -84,6 +85,18 @@ final class ProductViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
         return view
+    }()
+    
+    private let favoriteButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.configuration = .plain()
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
+        button.setImage(UIImage(systemName: "heart", withConfiguration: config), for: .normal)
+        button.setImage(UIImage(systemName: "heart.fill", withConfiguration: config), for: .selected)
+        button.tintColor = .systemGray4
+        button.adjustsImageWhenHighlighted = false
+        return button
     }()
     
     init(
@@ -120,6 +133,7 @@ final class ProductViewController: UIViewController {
         view.addSubview(priceLabel)
         view.addSubview(addToCartButton)
         view.addSubview(cartQuantityView)
+        view.addSubview(favoriteButton)
         view.addSubview(headerView)
         headerView.addSubview(logoImageView)
     }
@@ -166,6 +180,11 @@ final class ProductViewController: UIViewController {
             cartQuantityView.heightAnchor.constraint(equalToConstant: 50),
             cartQuantityView.widthAnchor.constraint(equalToConstant: 150),
             
+            favoriteButton.topAnchor.constraint(equalTo: imageView.topAnchor),
+            favoriteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 48),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 48),
+            
         ])
     }
     
@@ -174,6 +193,13 @@ final class ProductViewController: UIViewController {
         addToCartButton.addAction(
             UIAction { [weak self] _ in
                 self?.viewModel.increaseCartQuantity()
+            },
+            for: .touchUpInside
+        )
+        
+        favoriteButton.addAction(
+            UIAction { [weak self] _ in
+                self?.viewModel.toggleFavorite()
             },
             for: .touchUpInside
         )
@@ -207,6 +233,10 @@ final class ProductViewController: UIViewController {
         
         viewModel.onAuthRequired = { [weak self] in
             self?.showAuthAlert()
+        }
+        
+        viewModel.onFavoriteUpdated = { [weak self] in
+            self?.updateFavoriteButton()
         }
     }
     
@@ -307,6 +337,7 @@ final class ProductViewController: UIViewController {
         updateAttributes()
         updateImage(urlString: product.baseImage)
         updateSelectedVariant()
+        updateFavoriteButton()
     }
     
     private func updateImage(urlString: String?) {
@@ -319,6 +350,13 @@ final class ProductViewController: UIViewController {
         imageLoader.loadImage(from: urlString) { [weak self] image in
             self?.imageView.image = image
         }
+    }
+    
+    private func updateFavoriteButton() {
+        favoriteButton.isSelected = viewModel.isFavorite
+        favoriteButton.tintColor = viewModel.isFavorite
+            ? .systemRed
+            : .systemGray4
     }
     
     private func updateSelectedVariant() {
@@ -365,14 +403,14 @@ final class ProductViewController: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = attributeTitle(for: type)
         titleLabel.font = .systemFont(
-            ofSize: 17,
+            ofSize: 10,
             weight: .semibold
         )
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let buttonsStack = UIStackView()
         buttonsStack.axis = .horizontal
-        buttonsStack.spacing = 8
+        buttonsStack.spacing = 5
         buttonsStack.translatesAutoresizingMaskIntoConstraints = false
         
         let options = viewModel.attributeOptions(for: type)
@@ -427,15 +465,15 @@ final class ProductViewController: UIViewController {
             
             buttonsStack.topAnchor.constraint(
                 equalTo: titleLabel.bottomAnchor,
-                constant: 8
+                constant: 4
             ),
             buttonsStack.leadingAnchor.constraint(
                 equalTo: container.leadingAnchor,
-                constant: 8
+                constant: 4
             ),
             buttonsStack.trailingAnchor.constraint(
                 lessThanOrEqualTo: container.trailingAnchor,
-                constant: 8
+                constant: 4
             ),
             buttonsStack.bottomAnchor.constraint(
                 equalTo: container.bottomAnchor

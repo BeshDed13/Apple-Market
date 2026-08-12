@@ -23,6 +23,10 @@ final class TabBarCoordinator: Coordinator {
     private let signUpFactory: SignUpFactory
     private let categoryFactory: CategoryFactory
     private let productFactory: ProductFactory
+    private let ordersFactory: OrdersFactory
+    private let settingsFactory: SettingsFactory
+    private let supportFactory: SupportFactory
+    private let notificationsFactory: NotificationsFactory
     
     init(
         navigationController: UINavigationController,
@@ -34,7 +38,11 @@ final class TabBarCoordinator: Coordinator {
         loginFactory: LoginFactory,
         signUpFactory: SignUpFactory,
         categoryFactory: CategoryFactory,
-        productFactory: ProductFactory
+        productFactory: ProductFactory,
+        ordersFactory: OrdersFactory,
+        settingsFactory: SettingsFactory,
+        supportFactory: SupportFactory,
+        notificationsFactory: NotificationsFactory
     ) {
         self.navigationController = navigationController
         self.mainFactory = mainFactory
@@ -46,6 +54,10 @@ final class TabBarCoordinator: Coordinator {
         self.signUpFactory = signUpFactory
         self.categoryFactory = categoryFactory
         self.productFactory = productFactory
+        self.ordersFactory = ordersFactory
+        self.settingsFactory = settingsFactory
+        self.supportFactory = supportFactory
+        self.notificationsFactory = notificationsFactory
     }
     func start() {
         
@@ -76,7 +88,11 @@ final class TabBarCoordinator: Coordinator {
         )
         let profileCoordinator = ProfileCoordinator(
             navigationController: profileNC,
-            profileFactory: profileFactory
+            profileFactory: profileFactory,
+            ordersFactory: ordersFactory,
+            settingsFactory: settingsFactory,
+            supportFactory: supportFactory,
+            notificationsFactory: notificationsFactory
         )
         let authCoordinator = AuthCoordinator(
             navigationController: authNC,
@@ -125,8 +141,8 @@ final class TabBarCoordinator: Coordinator {
                                          selectedImage: UIImage(systemName: "square.grid.2x2.fill"))
         
         favoritesNC.tabBarItem = UITabBarItem(title: "Избранное",
-                                            image: UIImage(systemName: "star"),
-                                            selectedImage: UIImage(systemName: "star.fill"))
+                                            image: UIImage(systemName: "heart"),
+                                            selectedImage: UIImage(systemName: "heart.fill"))
         
         cartNC.tabBarItem = UITabBarItem(title: "Корзина",
                                                     image: UIImage(systemName: "cart"),

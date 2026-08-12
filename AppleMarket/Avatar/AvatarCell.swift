@@ -23,9 +23,11 @@ final class AvatarCell: UICollectionViewCell {
         
         contentView.addSubview(imageView)
         
-        contentView.layer.cornerRadius = 20
-        contentView.layer.borderWidth = 2
-        contentView.layer.borderColor = UIColor.clear.cgColor
+        layer.cornerRadius = DesignSystem.Radius.cellRadius
+        layer.shadowColor = DesignSystem.Shadow.color
+        layer.shadowOpacity = DesignSystem.Shadow.opacity
+        layer.shadowRadius = DesignSystem.Shadow.radius
+        layer.shadowOffset = DesignSystem.Shadow.offset
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),

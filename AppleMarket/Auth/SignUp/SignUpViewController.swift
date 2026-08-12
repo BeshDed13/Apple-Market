@@ -20,6 +20,19 @@ final class SignUpViewController: UIViewController {
     private let passwordTextField = CustomTextField()
     private let signUpButton = SignUpButton()
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.keyboardDismissMode = .interactive
+        return scrollView
+    }()
+
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray6
@@ -42,7 +55,7 @@ final class SignUpViewController: UIViewController {
         iv.layer.cornerRadius = 50
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
-        iv.image = UIImage(systemName: "person.crop.circle")
+        iv.image = UIImage(systemName: "person.circle")
         iv.widthAnchor.constraint(equalToConstant: 100).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 100).isActive = true
         return iv
@@ -75,6 +88,10 @@ final class SignUpViewController: UIViewController {
         setupConstraints()
         setupActions()
         
+        nameTextField.delegate = self
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
         viewModel.didSignUpSuccessfully = { [weak self] in
             self?.onSignUpSuccess?()
         }
@@ -84,58 +101,183 @@ final class SignUpViewController: UIViewController {
         navigationItem.title = "Зарегистрироваться"
         view.backgroundColor = DesignSystem.Colors.primary
         
-        view.addSubview(nameTextField)
-        view.addSubview(emailTextField)
-        view.addSubview(passwordTextField)
-        view.addSubview(avatarImageView)
-        view.addSubview(signUpButton)
-        view.addSubview(agreementLabel)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubview(avatarImageView)
+        contentView.addSubview(nameTextField)
+        contentView.addSubview(emailTextField)
+        contentView.addSubview(passwordTextField)
+        contentView.addSubview(signUpButton)
+        contentView.addSubview(agreementLabel)
+        
         view.addSubview(headerView)
         headerView.addSubview(logoImageView)
         
         nameTextField.placeholder = "Имя"
-        emailTextField.placeholder = "Почта"
-        passwordTextField.placeholder = "Пароль"
+        nameTextField.keyboardType = .default
+        nameTextField.textContentType = .name
+        nameTextField.autocapitalizationType = .words
+        nameTextField.returnKeyType = .next
         
+        emailTextField.placeholder = "Почта"
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.textContentType = .emailAddress
+        emailTextField.autocapitalizationType = .none
+        emailTextField.returnKeyType = .next
+        
+        passwordTextField.placeholder = "Пароль"
+        passwordTextField.isSecureTextEntry = true
+        passwordTextField.textContentType = .newPassword
+        passwordTextField.returnKeyType = .done
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            
+            // MARK: - ScrollView
+            
+            scrollView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            scrollView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            scrollView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            scrollView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor
+            ),
+            
+            // MARK: - ContentView
+            
+            contentView.topAnchor.constraint(
+                equalTo: scrollView.contentLayoutGuide.topAnchor
+            ),
+            contentView.leadingAnchor.constraint(
+                equalTo: scrollView.contentLayoutGuide.leadingAnchor
+            ),
+            contentView.trailingAnchor.constraint(
+                equalTo: scrollView.contentLayoutGuide.trailingAnchor
+            ),
+            contentView.bottomAnchor.constraint(
+                equalTo: scrollView.contentLayoutGuide.bottomAnchor
+            ),
+            
+            contentView.widthAnchor.constraint(
+                equalTo: scrollView.frameLayoutGuide.widthAnchor
+            ),
+            
+            // MARK: - Header
+            
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
-            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
-            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.centerXAnchor.constraint(
+                equalTo: headerView.centerXAnchor
+            ),
+            logoImageView.centerYAnchor.constraint(
+                equalTo: headerView.centerYAnchor
+            ),
             logoImageView.heightAnchor.constraint(equalToConstant: 64),
             
-            nameTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -60),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            // MARK: - Avatar
+            
+            avatarImageView.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: 32
+            ),
+            avatarImageView.centerXAnchor.constraint(
+                equalTo: contentView.centerXAnchor
+            ),
+            
+            // MARK: - Name
+            
+            nameTextField.topAnchor.constraint(
+                equalTo: avatarImageView.bottomAnchor,
+                constant: 24
+            ),
+            nameTextField.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: 16
+            ),
+            nameTextField.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -16
+            ),
             nameTextField.heightAnchor.constraint(equalToConstant: 50),
             
-            emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 16),
-            emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            // MARK: - Email
+            
+            emailTextField.topAnchor.constraint(
+                equalTo: nameTextField.bottomAnchor,
+                constant: 16
+            ),
+            emailTextField.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: 16
+            ),
+            emailTextField.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -16
+            ),
             emailTextField.heightAnchor.constraint(equalToConstant: 50),
             
-            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 16),
-            passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            // MARK: - Password
+            
+            passwordTextField.topAnchor.constraint(
+                equalTo: emailTextField.bottomAnchor,
+                constant: 16
+            ),
+            passwordTextField.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: 16
+            ),
+            passwordTextField.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -16
+            ),
             passwordTextField.heightAnchor.constraint(equalToConstant: 50),
             
-            signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 50),
-            signUpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            signUpButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            // MARK: - Sign Up
+            
+            signUpButton.topAnchor.constraint(
+                equalTo: passwordTextField.bottomAnchor,
+                constant: 50
+            ),
+            signUpButton.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: 16
+            ),
+            signUpButton.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -16
+            ),
             signUpButton.heightAnchor.constraint(equalToConstant: 50),
             
-            avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            avatarImageView.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -16),
+            // MARK: - Agreement
             
-            agreementLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            agreementLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            agreementLabel.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 24),
+            agreementLabel.topAnchor.constraint(
+                equalTo: signUpButton.bottomAnchor,
+                constant: 24
+            ),
+            agreementLabel.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: 16
+            ),
+            agreementLabel.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -16
+            ),
+            agreementLabel.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -32
+            )
         ])
     }
     
@@ -192,5 +334,25 @@ final class SignUpViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "ОК", style: .default))
         present(alert, animated: true)
     }
+}
 
+extension SignUpViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case nameTextField:
+            emailTextField.becomeFirstResponder()
+            
+        case emailTextField:
+            passwordTextField.becomeFirstResponder()
+            
+        case passwordTextField:
+            passwordTextField.resignFirstResponder()
+            
+        default:
+            break
+        }
+        
+        return true
+    }
 }

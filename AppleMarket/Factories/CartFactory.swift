@@ -18,10 +18,12 @@ final class CartFactory {
     func make() -> CartViewController {
         let viewModel = CartViewModel(
             authService: container.authService,
-            userService: container.userService
+            cartService: container.cartService,
+            catalogService: container.catalogService
             )
         return CartViewController(
-            viewModel: viewModel
+            viewModel: viewModel,
+            imageLoader: container.imageLoader
         )
     }
 }

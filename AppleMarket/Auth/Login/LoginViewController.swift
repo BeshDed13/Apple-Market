@@ -13,6 +13,19 @@ final class LoginViewController: UIViewController {
     
     private let viewModel: LoginViewModelProtocol
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.keyboardDismissMode = .interactive
+        return scrollView
+    }()
+
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray6
@@ -49,6 +62,9 @@ final class LoginViewController: UIViewController {
         setupConstraints()
         setupActions()
         
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
         viewModel.didLoginSuccessfully = { [weak self] in
             self?.onLoginSuccess?()
         }
@@ -58,14 +74,24 @@ final class LoginViewController: UIViewController {
         navigationItem.title = "Войти"
         view.backgroundColor = DesignSystem.Colors.primary
         
-        view.addSubview(emailTextField)
-        view.addSubview(passwordTextField)
-        view.addSubview(loginButton)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+
+        contentView.addSubview(emailTextField)
+        contentView.addSubview(passwordTextField)
+        contentView.addSubview(loginButton)
         view.addSubview(headerView)
         headerView.addSubview(logoImageView)
         
         emailTextField.placeholder = "Почта"
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.textContentType = .username
+        emailTextField.autocapitalizationType = .none
+
         passwordTextField.placeholder = "Пароль"
+        passwordTextField.isSecureTextEntry = true
+        passwordTextField.textContentType = .password
+        passwordTextField.returnKeyType = .done
         
     }
     
@@ -79,21 +105,40 @@ final class LoginViewController: UIViewController {
             logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
             logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 64),
-            
-            emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+
+            scrollView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+
+            emailTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 100),
+            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             emailTextField.heightAnchor.constraint(equalToConstant: 50),
-            
+
             passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 16),
-            passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             passwordTextField.heightAnchor.constraint(equalToConstant: 50),
-            
+
             loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 50),
-            loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
+
+            loginButton.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -32
+            )
         ])
     }
     
@@ -126,5 +171,23 @@ final class LoginViewController: UIViewController {
         
         alert.addAction(UIAlertAction(title: "ОК", style: .default))
         present(alert, animated: true)
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case emailTextField:
+            passwordTextField.becomeFirstResponder()
+            
+        case passwordTextField:
+            passwordTextField.resignFirstResponder()
+            
+        default:
+            break
+        }
+        
+        return true
     }
 }

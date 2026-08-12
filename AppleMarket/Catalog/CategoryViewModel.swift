@@ -15,6 +15,8 @@ protocol CategoryViewModelProtocol: AnyObject {
     var onError: ((Error) -> Void)? { get set }
     
     func loadProducts()
+    func isFavorite(productID: String) -> Bool
+    func toggleFavorite(productID: String) -> Bool
 }
 
 final class CategoryViewModel: CategoryViewModelProtocol {
@@ -23,12 +25,18 @@ final class CategoryViewModel: CategoryViewModelProtocol {
     var onError: ((Error) -> Void)?
     
     private let catalogService: CatalogServiceProtocol
+    private let favoritesService: FavoritesServiceProtocol
     private let categoryId: String
     
     private(set) var products: [Product] = []
     
-    init(catalogService: CatalogServiceProtocol, categoryId: String) {
+    init(
+        catalogService: CatalogServiceProtocol,
+        favoritesService: FavoritesServiceProtocol,
+        categoryId: String
+    ) {
         self.catalogService = catalogService
+        self.favoritesService = favoritesService
         self.categoryId = categoryId
     }
     
@@ -43,5 +51,12 @@ final class CategoryViewModel: CategoryViewModelProtocol {
             }
         }
     }
-
+    
+    func isFavorite(productID: String) -> Bool {
+        favoritesService.isFavorite(productID: productID)
+    }
+    
+    func toggleFavorite(productID: String) -> Bool {
+        favoritesService.toggle(productID: productID)
+    }
 }

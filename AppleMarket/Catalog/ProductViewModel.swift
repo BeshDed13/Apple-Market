@@ -20,10 +20,12 @@ protocol ProductViewModelProtocol: AnyObject {
     var selectedVariant: ProductVariant? { get }
 
     var selectedAttributes: [String: String] { get }
+    var isFavorite: Bool { get }
 
     var onProductUpdated: (() -> Void)? { get set }
     var onVariantSelected: (() -> Void)? { get set }
     var onError: ((Error) -> Void)? { get set }
+    var onFavoriteUpdated: (() -> Void)? { get set }
 
     func loadProduct()
     func selectAttribute(type: String, value: String)
@@ -35,6 +37,7 @@ protocol ProductViewModelProtocol: AnyObject {
     
     func increaseCartQuantity()
     func decreaseCartQuantity()
+    func toggleFavorite()
 }
 
 final class ProductViewModel: ProductViewModelProtocol {
@@ -44,13 +47,16 @@ final class ProductViewModel: ProductViewModelProtocol {
     var onError: ((Error) -> Void)?
     var onCartUpdated: (() -> Void)?
     var onAuthRequired: (() -> Void)?
+    var onFavoriteUpdated: (() -> Void)?
 
     private(set) var cartQuantity: Int = 0
+    private(set) var isFavorite: Bool = false
 
     private let catalogService: CatalogServiceProtocol
     private let productId: String
     private let cartService: CartServiceProtocol
     private let authService: AuthServiceProtocol
+    private let favoritesService: FavoritesServiceProtocol
 
     private(set) var product: Product?
     private(set) var variants: [ProductVariant] = []
@@ -61,15 +67,21 @@ final class ProductViewModel: ProductViewModelProtocol {
         catalogService: CatalogServiceProtocol,
         productId: String,
         cartService: CartServiceProtocol,
-        authService: AuthServiceProtocol
+        authService: AuthServiceProtocol,
+        favoritesService: FavoritesServiceProtocol
     ) {
         self.catalogService = catalogService
         self.productId = productId
         self.cartService = cartService
         self.authService = authService
+        self.favoritesService = favoritesService
     }
 
     func loadProduct() {
+
+        isFavorite = favoritesService.isFavorite(
+            productID: productId
+        )
 
         catalogService.fetchProduct(id: productId) { [weak self] result in
 
@@ -289,5 +301,13 @@ final class ProductViewModel: ProductViewModelProtocol {
                 }
             }
         }
+    }
+    
+    func toggleFavorite() {
+        isFavorite = favoritesService.toggle(
+            productID: productId
+        )
+
+        onFavoriteUpdated?()
     }
 }

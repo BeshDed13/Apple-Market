@@ -20,7 +20,7 @@ final class LoginButton: UIButton {
     
     private func configure() {
         backgroundColor = .systemBlue
-        layer.cornerRadius = DesignSystem.Radius.xlarge
+        layer.cornerRadius = DesignSystem.Radius.buttonRadius
         setTitle("Войти", for: .normal)
         setTitleColor(.white, for: .normal)
         titleLabel?.font = DesignSystem.Fonts.body

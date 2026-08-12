@@ -23,9 +23,12 @@ final class CustomTextField: UITextField {
         backgroundColor = .systemGray6
         layer.borderWidth = 0.25
         layer.borderColor = UIColor.lightGray.cgColor
-        layer.cornerRadius = DesignSystem.Radius.xlarge
+        layer.cornerRadius = DesignSystem.Radius.buttonRadius
         leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
         leftViewMode = .always
         clipsToBounds = true
+        autocorrectionType = .no
+        spellCheckingType = .no
+        returnKeyType = .next
     }
 }

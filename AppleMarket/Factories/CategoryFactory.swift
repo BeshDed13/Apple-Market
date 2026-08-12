@@ -19,6 +19,7 @@ final class CategoryFactory {
 
         let viewModel = CategoryViewModel(
             catalogService: container.catalogService,
+            favoritesService: container.favoritesService,
             categoryId: category.id
         )
 
