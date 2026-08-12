@@ -305,7 +305,7 @@ final class SignUpViewController: UIViewController {
             let password = passwordTextField.text,
             let avatar = selectedAvatar
         else {
-            showAlert(message: "Заполните все поля и выберите аватарку")
+            showAlert(message: "Заполните все поля и выберите аватара")
             return
         }
 
