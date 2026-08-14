@@ -48,8 +48,8 @@ final class ProfileCoordinator: Coordinator {
             self?.onSignUpRequested?()
         }
         
-        vc.onOrdersTapped = { [weak self] in
-            self?.showOrders( )
+        vc.onOrdersTapped = { [weak self] user in
+            self?.showOrders(user: user)
         }
         
         vc.onSettingsTapped = { [weak self] in
@@ -66,8 +66,8 @@ final class ProfileCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func showOrders() {
-        let vc = ordersFactory.make()
+    func showOrders(user: UserModel) {
+        let vc = ordersFactory.make(user: user)
 
         navigationController.pushViewController(
             vc,

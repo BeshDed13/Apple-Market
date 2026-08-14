@@ -16,6 +16,11 @@ protocol OrderServiceProtocol {
         userId: String,
         completion: @escaping (Result<Order, Error>) -> Void
     )
+    
+    func fetchOrders(
+        userId: String,
+        completion: @escaping (Result<[Order], Error>) -> Void
+    )
 }
 
 final class OrderService: OrderServiceProtocol {
@@ -59,5 +64,34 @@ final class OrderService: OrderServiceProtocol {
         } catch {
             completion(.failure(error))
         }
+    }
+    
+    func fetchOrders(userId: String, completion: @escaping (Result<[Order], Error>) -> Void) {
+        db
+            .collection("users")
+            .document(userId)
+            .collection("orders")
+            .order(by: "createdAt", descending: true)
+            .getDocuments { snapshot, error in
+                if let error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let documents = snapshot?.documents else {
+                    completion(.success([]))
+                    return
+                }
+                
+                do {
+                    let orders = try documents.map {
+                        try $0.data(as: Order.self)
+                    }
+                    
+                    completion(.success(orders))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
     }
 }

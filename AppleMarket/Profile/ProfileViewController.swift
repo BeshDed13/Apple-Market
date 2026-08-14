@@ -53,7 +53,7 @@ final class ProfileViewController: UIViewController {
     
     var onLoginTapped: (() -> Void)?
     var onSignUpTapped: (() -> Void)?
-    var onOrdersTapped: (() -> Void)?
+    var onOrdersTapped: ((UserModel) -> Void)?
     var onSettingsTapped: (() -> Void)?
     var onSupportTapped: (() -> Void)?
     var onNotificationsTapped: ((UserModel) -> Void)?
@@ -186,7 +186,13 @@ final class ProfileViewController: UIViewController {
         }
         
         profileMenuView.onOrdersTapped = { [weak self] in
-            self?.onOrdersTapped?()
+            
+            guard let self,
+                  case .authorized(let user) = self.viewModel.authState else {
+                return
+            }
+            
+            self.onOrdersTapped?(user)
         }
         
         profileMenuView.onSupportTapped = { [weak self] in
