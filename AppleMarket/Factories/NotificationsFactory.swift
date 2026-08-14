@@ -15,7 +15,14 @@ final class NotificationsFactory {
         self.container = container
     }
     
-    func make() -> NotificationsViewController {
-        NotificationsViewController()
+    func make(user: UserModel) -> NotificationsViewController {
+        
+        let viewModel = NotificationsViewModel(
+            notificationService: container.notificationService,
+            userId: user.id
+        )
+        return NotificationsViewController(
+            viewModel: viewModel
+        )
     }
 }

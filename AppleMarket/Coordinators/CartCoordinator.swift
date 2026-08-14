@@ -14,15 +14,19 @@ final class CartCoordinator: Coordinator {
     
     var onLoginRequested: (() -> Void)?
     var onSignUpRequested: (() -> Void)?
+    var onOrderCreated: (() -> Void)?
     
     private let cartFactory: CartFactory
+    private let checkoutFactory: CheckoutFactory
     
     init(
         navigationController: UINavigationController,
-        cartFactory: CartFactory
+        cartFactory: CartFactory,
+        checkoutFactory: CheckoutFactory
     ) {
         self.navigationController = navigationController
         self.cartFactory = cartFactory
+        self.checkoutFactory = checkoutFactory
     }
     
     func start() {
@@ -35,7 +39,35 @@ final class CartCoordinator: Coordinator {
         vc.onSignUpTapped = { [weak self] in
             self?.onSignUpRequested?()
         }
+        
+        vc.onPlaceAnOrderTapped = { [weak self] cartProducts, user in
+            self?.showCheckout(
+                cartProducts: cartProducts,
+                user: user
+            )
+        }
+        
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    private func showCheckout(
+        cartProducts: [CartProduct],
+        user: UserModel
+    ) {
+        
+        let vc = checkoutFactory.make(
+            cartProducts: cartProducts,
+            user: user
+        )
+        
+        vc.onOrderCreated = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
+        
+        navigationController.pushViewController(
+            vc,
+            animated: true
+        )
     }
 }
 

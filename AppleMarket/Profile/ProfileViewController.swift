@@ -56,7 +56,7 @@ final class ProfileViewController: UIViewController {
     var onOrdersTapped: (() -> Void)?
     var onSettingsTapped: (() -> Void)?
     var onSupportTapped: (() -> Void)?
-    var onNotificationsTapped: (() -> Void)?
+    var onNotificationsTapped: ((UserModel) -> Void)?
     
     init(viewModel: ProfileViewModelProtocol) {
         self.viewModel = viewModel
@@ -221,6 +221,11 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func notificationsTapped() {
-        onNotificationsTapped?()
+        
+        guard case .authorized(let user) = viewModel.authState else {
+            return
+        }
+        
+        onNotificationsTapped?(user)
     }
 }

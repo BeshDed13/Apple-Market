@@ -166,9 +166,9 @@ final class ProductViewController: UIViewController {
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            priceLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),
             priceLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             priceLabel.trailingAnchor.constraint(equalTo: addToCartButton.leadingAnchor, constant: 16),
+            priceLabel.centerYAnchor.constraint(equalTo: addToCartButton.centerYAnchor),
             
             addToCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             addToCartButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),

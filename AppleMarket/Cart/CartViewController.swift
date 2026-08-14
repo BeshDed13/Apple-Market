@@ -11,6 +11,7 @@ final class CartViewController: UIViewController {
     
     var onLoginTapped: (() -> Void)?
     var onSignUpTapped: (() -> Void)?
+    var onPlaceAnOrderTapped: (([CartProduct], UserModel) -> Void)?
     
     private let viewModel: CartViewModelProtocol
     private let imageLoader: ImageLoaderProtocol
@@ -70,6 +71,17 @@ final class CartViewController: UIViewController {
         return indicator
     }()
     
+    private let placeAnOrderButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Оформить заказ", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        button.backgroundColor = .systemGreen
+        button.layer.cornerRadius = DesignSystem.Radius.buttonRadius
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     init(
         viewModel: CartViewModelProtocol,
         imageLoader: ImageLoaderProtocol
@@ -124,6 +136,7 @@ final class CartViewController: UIViewController {
         view.addSubview(totalLabel)
         view.addSubview(authenticationView)
         view.addSubview(activityIndicator)
+        view.addSubview(placeAnOrderButton)
         
         view.addSubview(headerView)
         headerView.addSubview(logoImageView)
@@ -216,16 +229,10 @@ final class CartViewController: UIViewController {
                 constant: 16
             ),
             totalLabel.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
+                equalTo: placeAnOrderButton.trailingAnchor,
                 constant: -16
             ),
-            totalLabel.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                constant: -12
-            ),
-            totalLabel.heightAnchor.constraint(
-                equalToConstant: 30
-            ),
+            totalLabel.centerYAnchor.constraint(equalTo: placeAnOrderButton.centerYAnchor),
             
             // Authentication
             
@@ -252,7 +259,12 @@ final class CartViewController: UIViewController {
             ),
             activityIndicator.centerYAnchor.constraint(
                 equalTo: view.centerYAnchor
-            )
+            ),
+            
+            placeAnOrderButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            placeAnOrderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            placeAnOrderButton.heightAnchor.constraint(equalToConstant: 50),
+            placeAnOrderButton.widthAnchor.constraint(equalToConstant: 150),
         ])
     }
     
@@ -265,6 +277,25 @@ final class CartViewController: UIViewController {
         authenticationView.onSignUpTapped = { [weak self] in
             self?.onSignUpTapped?()
         }
+        
+        placeAnOrderButton.addAction(
+            UIAction { [weak self] _ in
+                self?.placeAnOrderButtonTapped()
+            },
+            for: .touchUpInside
+        )
+    }
+    
+    private func placeAnOrderButtonTapped() {
+        
+        guard case .authorized(let user) = viewModel.authState else {
+            return
+        }
+        
+        onPlaceAnOrderTapped?(
+            viewModel.cartProducts,
+            user
+        )
     }
     
     private func updateUI() {
@@ -279,6 +310,7 @@ final class CartViewController: UIViewController {
             tableView.isHidden = true
             emptyLabel.isHidden = true
             totalLabel.isHidden = true
+            placeAnOrderButton.isHidden = true
             
         case .guest:
             
@@ -288,6 +320,7 @@ final class CartViewController: UIViewController {
             tableView.isHidden = true
             emptyLabel.isHidden = true
             totalLabel.isHidden = true
+            placeAnOrderButton.isHidden = true
             
         case .authorized:
             
@@ -300,6 +333,7 @@ final class CartViewController: UIViewController {
             tableView.isHidden = isEmpty
             emptyLabel.isHidden = !isEmpty
             totalLabel.isHidden = isEmpty
+            placeAnOrderButton.isHidden = isEmpty
             
             if !isEmpty {
                 tableView.reloadData()

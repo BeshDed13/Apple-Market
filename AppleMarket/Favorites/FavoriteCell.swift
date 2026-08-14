@@ -25,7 +25,7 @@ final class FavoriteCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = DesignSystem.Fonts.body
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .black
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +34,7 @@ final class FavoriteCell: UICollectionViewCell {
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = DesignSystem.Fonts.body
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .black
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false

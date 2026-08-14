@@ -21,6 +21,8 @@ protocol CartViewModelProtocol: AnyObject {
     func increaseQuantity(at index: Int)
     func decreaseQuantity(at index: Int)
     func removeItem(at index: Int)
+    
+    func makeOrderItems() -> [OrderItem]
 }
 
 @MainActor
@@ -250,6 +252,26 @@ final class CartViewModel: CartViewModelProtocol {
                     self.onError?(error)
                 }
             }
+        }
+    }
+    
+    func makeOrderItems() -> [OrderItem] {
+        
+        cartProducts.compactMap { item in
+            
+            guard let variantId = item.variant.id else {
+                return nil
+            }
+            
+            return OrderItem(
+                productId: item.product.id ?? "",
+                variantId: variantId,
+                name: item.product.name,
+                imageURL: item.product.baseImage,
+                price: item.variant.price,
+                quantity: item.quantity,
+                attributes: item.variant.attributes
+            )
         }
     }
 }

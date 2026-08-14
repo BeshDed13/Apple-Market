@@ -147,7 +147,7 @@ final class CartCell: UITableViewCell {
     }
     
     private func setupUI() {
-        backgroundColor = .clear
+        backgroundColor = DesignSystem.Colors.primary
         selectionStyle = .none
         
         contentView.backgroundColor = DesignSystem.Colors.primary
@@ -155,13 +155,11 @@ final class CartCell: UITableViewCell {
         contentView.layer.cornerRadius = DesignSystem.Radius.cellRadius
         contentView.layer.masksToBounds = true
         
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.1
-        layer.shadowRadius = 10
-        layer.shadowOffset = CGSize(
-            width: 0,
-            height: 4
-        )
+        layer.cornerRadius = DesignSystem.Radius.cellRadius
+        layer.shadowColor = DesignSystem.Shadow.color
+        layer.shadowOpacity = DesignSystem.Shadow.opacity
+        layer.shadowRadius = DesignSystem.Shadow.radius
+        layer.shadowOffset = DesignSystem.Shadow.offset
     }
     
     private func setupConstraints() {

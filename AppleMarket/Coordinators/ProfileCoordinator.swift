@@ -60,8 +60,8 @@ final class ProfileCoordinator: Coordinator {
             self?.showSupport( )
         }
         
-        vc.onNotificationsTapped = { [weak self] in
-            self?.showNotifications()
+        vc.onNotificationsTapped = { [weak self] user in
+            self?.showNotifications(user: user)
         }
         navigationController.pushViewController(vc, animated: true)
     }
@@ -93,8 +93,8 @@ final class ProfileCoordinator: Coordinator {
         )
     }
     
-    func showNotifications() {
-        let vc = notificationsFactory.make()
+    func showNotifications(user: UserModel) {
+        let vc = notificationsFactory.make(user: user)
         
         navigationController.pushViewController(
             vc,
