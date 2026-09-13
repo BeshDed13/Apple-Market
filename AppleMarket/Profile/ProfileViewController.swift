@@ -9,6 +9,8 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let viewModel: ProfileViewModelProtocol
     
     private let authenticationView = AuthenticationView()
@@ -54,9 +56,11 @@ final class ProfileViewController: UIViewController {
     var onLoginTapped: (() -> Void)?
     var onSignUpTapped: (() -> Void)?
     var onOrdersTapped: ((UserModel) -> Void)?
-    var onSettingsTapped: (() -> Void)?
-    var onSupportTapped: (() -> Void)?
+    var onSettingsTapped: ((UserModel) -> Void)?
+    var onSupportTapped: ((UserModel) -> Void)?
     var onNotificationsTapped: ((UserModel) -> Void)?
+    
+    // MARK: - Init
     
     init(viewModel: ProfileViewModelProtocol) {
         self.viewModel = viewModel
@@ -66,6 +70,8 @@ final class ProfileViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,6 +147,8 @@ final class ProfileViewController: UIViewController {
         }
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -182,7 +190,12 @@ final class ProfileViewController: UIViewController {
         }
         
         profileMenuView.onSettingsTapped = { [weak self] in
-            self?.onSettingsTapped?()
+            
+            guard case .authorized(let user) = self?.viewModel.authState else {
+                return
+            }
+            
+            self?.onSettingsTapped?(user)
         }
         
         profileMenuView.onOrdersTapped = { [weak self] in
@@ -196,7 +209,11 @@ final class ProfileViewController: UIViewController {
         }
         
         profileMenuView.onSupportTapped = { [weak self] in
-            self?.onSupportTapped?()
+            guard case .authorized(let user) = self?.viewModel.authState else {
+                return
+            }
+            
+            self?.onSupportTapped?(user)
         }
     }
     

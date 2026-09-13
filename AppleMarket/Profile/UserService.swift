@@ -24,6 +24,13 @@ protocol UserServiceProtocol {
         _ user: UserModel,
         completion: @escaping (Result<Void, Error>) -> Void
     )
+    
+    func updateProfile(
+        userId: String,
+        name: String,
+        avatar: Avatar,
+        completion: @escaping (Result<Void, Error>) -> Void
+    )
 }
 
 final class UserService: UserServiceProtocol {
@@ -102,5 +109,28 @@ final class UserService: UserServiceProtocol {
         } catch {
             completion(.failure(error))
         }
+    }
+    
+    func updateProfile(
+        userId: String,
+        name: String,
+        avatar: Avatar,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        
+        db
+            .collection("users")
+            .document(userId)
+            .updateData([
+                "name": name,
+                "avatar": avatar.rawValue
+            ]) { error in
+                
+                if let error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
+            }
     }
 }

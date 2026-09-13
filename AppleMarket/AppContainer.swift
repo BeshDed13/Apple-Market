@@ -19,6 +19,7 @@ final class AppContainer {
     let storeService: StoreServiceProtocol
     let orderService: OrderServiceProtocol
     let notificationService: NotificationServiceProtocol
+    let supportService: SupportServiceProtocol
     
     init() {
         let userService = UserService()
@@ -33,5 +34,6 @@ final class AppContainer {
         self.storeService = StoreService()
         self.orderService = OrderService()
         self.notificationService = NotificationService()
+        self.supportService = SupportService()
     }
 }

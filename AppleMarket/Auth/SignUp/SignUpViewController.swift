@@ -9,6 +9,8 @@ import UIKit
 
 final class SignUpViewController: UIViewController {
     
+    // MARK: - Properties
+    
     var onSignUpSuccess: (() -> Void)?
     
     private let viewModel: SignUpViewModelProtocol
@@ -72,6 +74,8 @@ final class SignUpViewController: UIViewController {
         return label
     }()
     
+    // MARK: - Init
+    
     init(viewModel: SignUpViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -80,6 +84,8 @@ final class SignUpViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,154 +138,61 @@ final class SignUpViewController: UIViewController {
         passwordTextField.returnKeyType = .done
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // MARK: - ScrollView
-            
-            scrollView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            scrollView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            scrollView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            scrollView.bottomAnchor.constraint(
-                equalTo: view.bottomAnchor
-            ),
-            
-            // MARK: - ContentView
-            
-            contentView.topAnchor.constraint(
-                equalTo: scrollView.contentLayoutGuide.topAnchor
-            ),
-            contentView.leadingAnchor.constraint(
-                equalTo: scrollView.contentLayoutGuide.leadingAnchor
-            ),
-            contentView.trailingAnchor.constraint(
-                equalTo: scrollView.contentLayoutGuide.trailingAnchor
-            ),
-            contentView.bottomAnchor.constraint(
-                equalTo: scrollView.contentLayoutGuide.bottomAnchor
-            ),
-            
-            contentView.widthAnchor.constraint(
-                equalTo: scrollView.frameLayoutGuide.widthAnchor
-            ),
-            
-            // MARK: - Header
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
-            headerView.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            logoImageView.centerXAnchor.constraint(
-                equalTo: headerView.centerXAnchor
-            ),
-            logoImageView.centerYAnchor.constraint(
-                equalTo: headerView.centerYAnchor
-            ),
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 64),
             
-            // MARK: - Avatar
+            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
+            avatarImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            avatarImageView.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 32
-            ),
-            avatarImageView.centerXAnchor.constraint(
-                equalTo: contentView.centerXAnchor
-            ),
-            
-            // MARK: - Name
-            
-            nameTextField.topAnchor.constraint(
-                equalTo: avatarImageView.bottomAnchor,
-                constant: 24
-            ),
-            nameTextField.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            nameTextField.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -16
-            ),
+            nameTextField.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 24),
+            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             nameTextField.heightAnchor.constraint(equalToConstant: 50),
             
-            // MARK: - Email
-            
-            emailTextField.topAnchor.constraint(
-                equalTo: nameTextField.bottomAnchor,
-                constant: 16
-            ),
-            emailTextField.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            emailTextField.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -16
-            ),
+            emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 16),
+            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             emailTextField.heightAnchor.constraint(equalToConstant: 50),
-            
-            // MARK: - Password
-            
-            passwordTextField.topAnchor.constraint(
-                equalTo: emailTextField.bottomAnchor,
-                constant: 16
-            ),
-            passwordTextField.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            passwordTextField.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -16
-            ),
+
+            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 16),
+            passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             passwordTextField.heightAnchor.constraint(equalToConstant: 50),
             
-            // MARK: - Sign Up
-            
-            signUpButton.topAnchor.constraint(
-                equalTo: passwordTextField.bottomAnchor,
-                constant: 50
-            ),
-            signUpButton.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            signUpButton.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -16
-            ),
+            signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 50),
+            signUpButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            signUpButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             signUpButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            // MARK: - Agreement
-            
-            agreementLabel.topAnchor.constraint(
-                equalTo: signUpButton.bottomAnchor,
-                constant: 24
-            ),
-            agreementLabel.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            agreementLabel.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -16
-            ),
-            agreementLabel.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -32
-            )
+
+            agreementLabel.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 24),
+            agreementLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            agreementLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            agreementLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32)
         ])
     }
+    
+    // MARK: - Actions
     
     private func setupActions() {
         signUpButton.addTarget(
@@ -328,6 +241,8 @@ final class SignUpViewController: UIViewController {
         present(vc, animated: true)
     }
     
+    // MARK: - Alert
+    
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
         
@@ -335,6 +250,8 @@ final class SignUpViewController: UIViewController {
         present(alert, animated: true)
     }
 }
+
+// MARK: - UITextFieldDelegate
 
 extension SignUpViewController: UITextFieldDelegate {
     

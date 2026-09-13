@@ -52,12 +52,12 @@ final class ProfileCoordinator: Coordinator {
             self?.showOrders(user: user)
         }
         
-        vc.onSettingsTapped = { [weak self] in
-            self?.showSettings()
+        vc.onSettingsTapped = { [weak self] user in
+            self?.showSettings(user: user)
         }
         
-        vc.onSupportTapped = { [weak self] in
-            self?.showSupport( )
+        vc.onSupportTapped = { [weak self] user in
+            self?.showSupport(user: user)
         }
         
         vc.onNotificationsTapped = { [weak self] user in
@@ -75,8 +75,8 @@ final class ProfileCoordinator: Coordinator {
         )
     }
     
-    func showSettings() {
-        let vc = settingsFactory.make()
+    func showSettings(user: UserModel) {
+        let vc = settingsFactory.make(user: user)
 
         navigationController.pushViewController(
             vc,
@@ -84,8 +84,8 @@ final class ProfileCoordinator: Coordinator {
         )
     }
     
-    func showSupport() {
-        let vc = supportFactory.make()
+    func showSupport(user: UserModel) {
+        let vc = supportFactory.make(user: user)
 
         navigationController.pushViewController(
             vc,

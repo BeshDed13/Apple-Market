@@ -17,6 +17,7 @@ final class StoreCell: UITableViewCell {
             ofSize: 16,
             weight: .medium
         )
+        label.textColor = DesignSystem.Colors.secondaryText
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

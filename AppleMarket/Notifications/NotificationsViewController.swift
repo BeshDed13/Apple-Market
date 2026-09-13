@@ -9,6 +9,8 @@ import UIKit
 
 final class NotificationsViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let viewModel: NotificationsViewModelProtocol
     
     private let headerView: UIView = {
@@ -54,6 +56,8 @@ final class NotificationsViewController: UIViewController {
         return label
     }()
     
+    // MARK: - Init
+    
     init(viewModel: NotificationsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -62,6 +66,8 @@ final class NotificationsViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,61 +92,29 @@ final class NotificationsViewController: UIViewController {
         view.addSubview(emptyLabel)
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            headerView.topAnchor.constraint(
-                equalTo: view.topAnchor
-            ),
-            headerView.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            headerView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            headerView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            
-            logoImageView.centerXAnchor.constraint(
-                equalTo: headerView.centerXAnchor
-            ),
-            logoImageView.centerYAnchor.constraint(
-                equalTo: headerView.centerYAnchor
-            ),
-            logoImageView.heightAnchor.constraint(
-                equalToConstant: 64
-            ),
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 64),
 
-            tableView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: 16
-            ),
-            tableView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor, constant: 16
-            ),
-            tableView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor, constant: -16
-            ),
-            tableView.bottomAnchor.constraint(
-                equalTo: view.bottomAnchor, constant: -16
-            ),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 16),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16),
             
-            emptyLabel.centerXAnchor.constraint(
-                equalTo: view.centerXAnchor
-            ),
-            emptyLabel.centerYAnchor.constraint(
-                equalTo: view.centerYAnchor
-            ),
-            emptyLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
-            ),
-            emptyLabel.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -16
-            )
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
     

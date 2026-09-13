@@ -9,6 +9,8 @@ import UIKit
 
 final class ProductViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray6
@@ -99,6 +101,8 @@ final class ProductViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Init
+    
     init(
         viewModel: ProductViewModelProtocol,
         imageLoader: ImageLoaderProtocol
@@ -111,6 +115,8 @@ final class ProductViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,6 +143,8 @@ final class ProductViewController: UIViewController {
         view.addSubview(headerView)
         headerView.addSubview(logoImageView)
     }
+    
+    // MARK: - Constraints
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([

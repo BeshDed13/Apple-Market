@@ -9,6 +9,8 @@ import UIKit
 
 final class CheckoutViewController: UIViewController {
     
+    // MARK: - Properties
+    
     var onOrderCreated: (() -> Void)?
     
     private let viewModel: CheckoutViewModelProtocol
@@ -123,6 +125,8 @@ final class CheckoutViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Init
+    
     init(viewModel: CheckoutViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -131,6 +135,8 @@ final class CheckoutViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -168,133 +174,50 @@ final class CheckoutViewController: UIViewController {
         view.addSubview(checkoutButton)
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            // MARK: Header
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 64),
             
-            headerView.topAnchor.constraint(
-                equalTo: view.topAnchor
-            ),
-            headerView.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            headerView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            headerView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
+            contactTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            contactTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            contactTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            logoImageView.centerXAnchor.constraint(
-                equalTo: headerView.centerXAnchor
-            ),
-            logoImageView.centerYAnchor.constraint(
-                equalTo: headerView.centerYAnchor
-            ),
-            logoImageView.heightAnchor.constraint(
-                equalToConstant: 64
-            ),
+            nameTitleLabel.topAnchor.constraint(equalTo: contactTitleLabel.bottomAnchor, constant: 16),
+            nameTitleLabel.leadingAnchor.constraint(equalTo: contactTitleLabel.leadingAnchor),
             
-            // MARK: Contact
+            nameLabel.topAnchor.constraint(equalTo: nameTitleLabel.bottomAnchor, constant: 4),
+            nameLabel.leadingAnchor.constraint(equalTo: contactTitleLabel.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: contactTitleLabel.trailingAnchor),
             
-            contactTitleLabel.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: 24
-            ),
-            contactTitleLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
-            ),
-            contactTitleLabel.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -16
-            ),
+            emailTitleLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 12),
+            emailTitleLabel.leadingAnchor.constraint(equalTo: contactTitleLabel.leadingAnchor),
             
-            nameTitleLabel.topAnchor.constraint(
-                equalTo: contactTitleLabel.bottomAnchor,
-                constant: 16
-            ),
-            nameTitleLabel.leadingAnchor.constraint(
-                equalTo: contactTitleLabel.leadingAnchor
-            ),
+            emailLabel.topAnchor.constraint(equalTo: emailTitleLabel.bottomAnchor, constant: 4),
+            emailLabel.leadingAnchor.constraint(equalTo: contactTitleLabel.leadingAnchor),
+            emailLabel.trailingAnchor.constraint(equalTo: contactTitleLabel.trailingAnchor),
             
-            nameLabel.topAnchor.constraint(
-                equalTo: nameTitleLabel.bottomAnchor,
-                constant: 4
-            ),
-            nameLabel.leadingAnchor.constraint(
-                equalTo: contactTitleLabel.leadingAnchor
-            ),
-            nameLabel.trailingAnchor.constraint(
-                equalTo: contactTitleLabel.trailingAnchor
-            ),
+            storeTitleLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor,constant: 28),
+            storeTitleLabel.leadingAnchor.constraint(equalTo: contactTitleLabel.leadingAnchor),
+            storeTitleLabel.trailingAnchor.constraint(equalTo: contactTitleLabel.trailingAnchor),
             
-            emailTitleLabel.topAnchor.constraint(
-                equalTo: nameLabel.bottomAnchor,
-                constant: 12
-            ),
-            emailTitleLabel.leadingAnchor.constraint(
-                equalTo: contactTitleLabel.leadingAnchor
-            ),
-            
-            emailLabel.topAnchor.constraint(
-                equalTo: emailTitleLabel.bottomAnchor,
-                constant: 4
-            ),
-            emailLabel.leadingAnchor.constraint(
-                equalTo: contactTitleLabel.leadingAnchor
-            ),
-            emailLabel.trailingAnchor.constraint(
-                equalTo: contactTitleLabel.trailingAnchor
-            ),
-            
-            // MARK: Stores
-            
-            storeTitleLabel.topAnchor.constraint(
-                equalTo: emailLabel.bottomAnchor,
-                constant: 28
-            ),
-            storeTitleLabel.leadingAnchor.constraint(
-                equalTo: contactTitleLabel.leadingAnchor
-            ),
-            storeTitleLabel.trailingAnchor.constraint(
-                equalTo: contactTitleLabel.trailingAnchor
-            ),
-            
-            tableView.topAnchor.constraint(
-                equalTo: storeTitleLabel.bottomAnchor,
-                constant: 8
-            ),
-            tableView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            tableView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            tableView.bottomAnchor.constraint(
-                equalTo: checkoutButton.topAnchor,
-                constant: -16
-            ),
-            
-            // MARK: Checkout button
-            
-            checkoutButton.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
-            ),
-            checkoutButton.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -16
-            ),
-            checkoutButton.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                constant: -16
-            ),
-            checkoutButton.heightAnchor.constraint(
-                equalToConstant: 50
-            )
+            tableView.topAnchor.constraint(equalTo: storeTitleLabel.bottomAnchor, constant: 8),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: checkoutButton.topAnchor, constant: -16),
+                    
+            checkoutButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            checkoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            checkoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            checkoutButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     

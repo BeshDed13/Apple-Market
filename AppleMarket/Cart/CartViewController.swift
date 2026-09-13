@@ -9,6 +9,8 @@ import UIKit
 
 final class CartViewController: UIViewController {
     
+    // MARK: - Properties
+    
     var onLoginTapped: (() -> Void)?
     var onSignUpTapped: (() -> Void)?
     var onPlaceAnOrderTapped: (([CartProduct], UserModel) -> Void)?
@@ -33,7 +35,8 @@ final class CartViewController: UIViewController {
     
     private let emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "В вашей корзине отсутствуют товары. Попробуйте поискать что-нибудь в каталоге!"
+        label.text = "Корзина пуста"
+        label.textColor = DesignSystem.Colors.secondaryText
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -82,6 +85,8 @@ final class CartViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Init
+    
     init(
         viewModel: CartViewModelProtocol,
         imageLoader: ImageLoaderProtocol
@@ -95,6 +100,8 @@ final class CartViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,110 +168,45 @@ final class CartViewController: UIViewController {
         tableView.rowHeight = 130
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            // Header
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 64),
+
+            emptyLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            emptyLabel.bottomAnchor.constraint(equalTo: totalLabel.topAnchor),
             
-            headerView.topAnchor.constraint(
-                equalTo: view.topAnchor
-            ),
-            headerView.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            headerView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            headerView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: totalLabel.topAnchor),
             
-            logoImageView.centerXAnchor.constraint(
-                equalTo: headerView.centerXAnchor
-            ),
-            logoImageView.centerYAnchor.constraint(
-                equalTo: headerView.centerYAnchor
-            ),
-            logoImageView.heightAnchor.constraint(
-                equalToConstant: 64
-            ),
-            
-            // Empty
-            
-            emptyLabel.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            emptyLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 24
-            ),
-            emptyLabel.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -24
-            ),
-            emptyLabel.bottomAnchor.constraint(
-                equalTo: totalLabel.topAnchor
-            ),
-            
-            // Table
-            
-            tableView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            tableView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            tableView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            tableView.bottomAnchor.constraint(
-                equalTo: totalLabel.topAnchor
-            ),
-            
-            // Total
-            
-            totalLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
-            ),
-            totalLabel.trailingAnchor.constraint(
-                equalTo: placeAnOrderButton.trailingAnchor,
-                constant: -16
-            ),
+            totalLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            totalLabel.trailingAnchor.constraint(equalTo: placeAnOrderButton.trailingAnchor, constant: -16),
             totalLabel.centerYAnchor.constraint(equalTo: placeAnOrderButton.centerYAnchor),
             
-            // Authentication
+            authenticationView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 48),
+            authenticationView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 48),
+            authenticationView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -48),
+            authenticationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            authenticationView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: 48
-            ),
-            authenticationView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 48
-            ),
-            authenticationView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -48
-            ),
-            authenticationView.centerXAnchor.constraint(
-                equalTo: view.centerXAnchor
-            ),
-            
-            // Activity
-            
-            activityIndicator.centerXAnchor.constraint(
-                equalTo: view.centerXAnchor
-            ),
-            activityIndicator.centerYAnchor.constraint(
-                equalTo: view.centerYAnchor
-            ),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             placeAnOrderButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             placeAnOrderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             placeAnOrderButton.heightAnchor.constraint(equalToConstant: 50),
-            placeAnOrderButton.widthAnchor.constraint(equalToConstant: 150),
+            placeAnOrderButton.widthAnchor.constraint(equalToConstant: 150)
         ])
     }
     

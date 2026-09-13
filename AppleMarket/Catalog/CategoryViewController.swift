@@ -9,6 +9,8 @@ import UIKit
 
 final class CategoryViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray6
@@ -42,13 +44,20 @@ final class CategoryViewController: UIViewController {
         )
         return collection
     }()
+    
+    // MARK: - Init
+    
     init(viewModel: CategoryViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -56,12 +65,16 @@ final class CategoryViewController: UIViewController {
         bindViewModel()
         viewModel.loadProducts()
     }
+    
     private func setupUI() {
         view.backgroundColor = DesignSystem.Colors.primary
         view.addSubview(collectionView)
         view.addSubview(headerView)
         headerView.addSubview(logoImageView)
     }
+    
+    // MARK: - Constraints
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -73,18 +86,10 @@ final class CategoryViewController: UIViewController {
             logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 64),
             
-            collectionView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            collectionView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            collectionView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            collectionView.bottomAnchor.constraint(
-                equalTo: view.bottomAnchor
-            )
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     private func bindViewModel() {

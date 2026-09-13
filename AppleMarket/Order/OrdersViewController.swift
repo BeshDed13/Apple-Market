@@ -9,6 +9,8 @@ import UIKit
 
 final class OrdersViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let viewModel: OrdersViewModelProtocol
     
     private let headerView: UIView = {
@@ -53,6 +55,8 @@ final class OrdersViewController: UIViewController {
         return label
     }()
     
+    // MARK: - Init
+    
     init(viewModel: OrdersViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -61,6 +65,8 @@ final class OrdersViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,61 +91,28 @@ final class OrdersViewController: UIViewController {
         view.addSubview(emptyLabel)
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            headerView.topAnchor.constraint(
-                equalTo: view.topAnchor
-            ),
-            headerView.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            headerView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            headerView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 64),
             
-            logoImageView.centerXAnchor.constraint(
-                equalTo: headerView.centerXAnchor
-            ),
-            logoImageView.centerYAnchor.constraint(
-                equalTo: headerView.centerYAnchor
-            ),
-            logoImageView.heightAnchor.constraint(
-                equalToConstant: 64
-            ),
-            
-            tableView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: 16
-            ),
-            tableView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            tableView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            tableView.bottomAnchor.constraint(
-                equalTo: view.bottomAnchor
-            ),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            emptyLabel.centerXAnchor.constraint(
-                equalTo: view.centerXAnchor
-            ),
-            emptyLabel.centerYAnchor.constraint(
-                equalTo: view.centerYAnchor
-            ),
-            emptyLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 32
-            ),
-            emptyLabel.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -32
-            )
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
         ])
     }
     

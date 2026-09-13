@@ -15,7 +15,14 @@ final class SettingsFactory {
         self.container = container
     }
     
-    func make() -> SettingsViewController {
-        SettingsViewController()
+    func make(user: UserModel) -> SettingsViewController {
+        
+        let viewModel = SettingsViewModel(
+            userService: container.userService,
+            user: user
+        )
+        return SettingsViewController(
+            viewModel: viewModel
+        )
     }
 }

@@ -9,6 +9,8 @@ import UIKit
 
 final class FavoritesViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray6
@@ -26,7 +28,8 @@ final class FavoritesViewController: UIViewController {
     
     private let emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "В избранном пока пусто. 😕"
+        label.text = "Список Избранного пуст"
+        label.textColor = DesignSystem.Colors.secondaryText
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -54,6 +57,8 @@ final class FavoritesViewController: UIViewController {
         return collection
     }()
     
+    // MARK: - Init
+    
     init(viewModel: FavoritesViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -62,6 +67,8 @@ final class FavoritesViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,51 +95,28 @@ final class FavoritesViewController: UIViewController {
         view.backgroundColor = DesignSystem.Colors.primary
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
-            headerView.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            logoImageView.centerXAnchor.constraint(
-                equalTo: headerView.centerXAnchor
-            ),
-            logoImageView.centerYAnchor.constraint(
-                equalTo: headerView.centerYAnchor
-            ),
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 64),
             
-            collectionView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            collectionView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            collectionView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            collectionView.bottomAnchor.constraint(
-                equalTo: view.bottomAnchor
-            ),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            emptyLabel.centerXAnchor.constraint(
-                equalTo: view.centerXAnchor
-            ),
-            emptyLabel.centerYAnchor.constraint(
-                equalTo: view.centerYAnchor
-            ),
-            emptyLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 32
-            ),
-            emptyLabel.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -32
-            )
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
         ])
     }
     

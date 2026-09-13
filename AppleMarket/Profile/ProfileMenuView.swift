@@ -27,7 +27,7 @@ final class ProfileMenuView: UIView {
     
     private let supportButton = ProfileMenuButton(
         title: "Поддержка",
-        image: UIImage(systemName: "questionmark.circle")
+        image: UIImage(systemName: "message")
     )
     
     override init(frame: CGRect) {

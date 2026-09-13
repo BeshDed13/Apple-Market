@@ -15,7 +15,14 @@ final class SupportFactory {
         self.container = container
     }
     
-    func make() -> SupportViewController {
-        SupportViewController()
+    func make(user: UserModel) -> SupportViewController {
+        
+        let viewModel = SupportViewModel(
+            supportService: container.supportService,
+            user: user
+        )
+        return SupportViewController(
+            viewModel: viewModel
+        )
     }
 }

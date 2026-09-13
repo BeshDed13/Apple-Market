@@ -9,6 +9,8 @@ import UIKit
 
 final class CatalogViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray6
@@ -48,6 +50,8 @@ final class CatalogViewController: UIViewController {
         return collection
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,6 +67,8 @@ final class CatalogViewController: UIViewController {
         view.addSubview(headerView)
         headerView.addSubview(logoImageView)
     }
+    
+    // MARK: - Constraints
     
     private func setupConstraints () {
         NSLayoutConstraint.activate([
