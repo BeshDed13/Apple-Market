@@ -155,6 +155,8 @@ final class CheckoutViewController: UIViewController {
         viewModel.loadStores()
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         
         navigationItem.title = "Оформление заказа"
@@ -221,6 +223,8 @@ final class CheckoutViewController: UIViewController {
         ])
     }
     
+    // MARK: - Setup TableView
+    
     private func setupTableView() {
         
         tableView.dataSource = self
@@ -233,6 +237,8 @@ final class CheckoutViewController: UIViewController {
         
         tableView.rowHeight = 70
     }
+    
+    // MARK: - Actions
     
     private func setupActions() {
         
@@ -304,6 +310,8 @@ final class CheckoutViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
+
 extension CheckoutViewController: UITableViewDataSource {
     
     func tableView(
@@ -335,6 +343,8 @@ extension CheckoutViewController: UITableViewDataSource {
         return cell
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension CheckoutViewController: UITableViewDelegate {
     

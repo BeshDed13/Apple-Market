@@ -11,9 +11,7 @@ import FirebaseAuth
 protocol AuthServiceProtocol {
 
     var currentUserID: String? { get }
-
     var isAuthorized: Bool { get }
-
     var authState: AuthState { get }
 
     func login(
@@ -25,7 +23,7 @@ protocol AuthServiceProtocol {
         request: SignUpRequest,
         completion: @escaping (Result<String, Error>) -> Void
     )
-
+    
     func logout() throws
 }
 

@@ -79,6 +79,8 @@ final class OrdersViewController: UIViewController {
         viewModel.loadOrders()
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         
         navigationItem.title = "Заказы"
@@ -115,6 +117,8 @@ final class OrdersViewController: UIViewController {
             emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
         ])
     }
+    
+    // MARK: - Setup TableView
     
     private func setupTableView() {
         
@@ -164,6 +168,8 @@ final class OrdersViewController: UIViewController {
         present(alert, animated: true)
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension OrdersViewController: UITableViewDataSource {
     

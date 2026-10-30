@@ -129,6 +129,8 @@ final class ProductViewController: UIViewController {
         viewModel.loadProduct()
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         view.backgroundColor = DesignSystem.Colors.primary
 
@@ -195,6 +197,8 @@ final class ProductViewController: UIViewController {
             
         ])
     }
+    
+    // MARK: - Actions
     
     private func setupActions() {
 
@@ -302,6 +306,8 @@ final class ProductViewController: UIViewController {
 
         present(alert, animated: true)
     }
+    
+    // MARK: - Update UI
     
     private func updateCartButton() {
 

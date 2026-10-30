@@ -87,10 +87,7 @@ final class CartViewController: UIViewController {
     
     // MARK: - Init
     
-    init(
-        viewModel: CartViewModelProtocol,
-        imageLoader: ImageLoaderProtocol
-    ) {
+    init(viewModel: CartViewModelProtocol, imageLoader: ImageLoaderProtocol) {
         self.viewModel = viewModel
         self.imageLoader = imageLoader
         
@@ -132,6 +129,8 @@ final class CartViewController: UIViewController {
             await viewModel.loadCart()
         }
     }
+    
+    // MARK: - Setup UI
     
     private func setupUI() {
         
@@ -210,6 +209,8 @@ final class CartViewController: UIViewController {
         ])
     }
     
+    // MARK: - Actions
+    
     private func setupActions() {
         
         authenticationView.onLoginTapped = { [weak self] in
@@ -239,6 +240,8 @@ final class CartViewController: UIViewController {
             user
         )
     }
+    
+    // MARK: - Update UI
     
     private func updateUI() {
         
@@ -319,6 +322,8 @@ final class CartViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
+
 extension CartViewController: UITableViewDataSource {
     
     func tableView(
@@ -358,6 +363,8 @@ extension CartViewController: UITableViewDataSource {
         return cell
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension CartViewController: UITableViewDelegate {
     

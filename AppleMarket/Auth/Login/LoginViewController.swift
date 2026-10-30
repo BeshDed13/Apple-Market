@@ -45,7 +45,6 @@ final class LoginViewController: UIViewController {
     
     private let emailTextField = CustomTextField()
     private let passwordTextField = CustomTextField()
-    
     private let loginButton = LoginButton()
     
     // MARK: - Init
@@ -75,6 +74,8 @@ final class LoginViewController: UIViewController {
             self?.onLoginSuccess?()
         }
     }
+    
+    // MARK: - Setup UI
     
     private func setupUI() {
         navigationItem.title = "Войти"

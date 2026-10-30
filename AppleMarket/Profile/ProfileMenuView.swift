@@ -9,6 +9,8 @@ import UIKit
 
 final class ProfileMenuView: UIView {
     
+    // MARK: - Properties
+    
     var onOrdersTapped: (() -> Void)?
     var onSettingsTapped: (() -> Void)?
     var onSupportTapped: (() -> Void)?
@@ -30,6 +32,8 @@ final class ProfileMenuView: UIView {
         image: UIImage(systemName: "message")
     )
     
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -42,6 +46,8 @@ final class ProfileMenuView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         addSubview(cardView)
         
@@ -51,6 +57,8 @@ final class ProfileMenuView: UIView {
         cardView.addSubview(settingsButton)
         cardView.addSubview(supportButton)
     }
+    
+    // MARK: - Constraints
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -76,6 +84,8 @@ final class ProfileMenuView: UIView {
             supportButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor)
         ])
     }
+    
+    // MARK: - Actions
     
     private func setupActions() {
         ordersButton.addTarget(

@@ -9,6 +9,8 @@ import UIKit
 
 final class FavoriteCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    
     static let identifier = "FavoriteCell"
     
     var onFavoriteTapped: ((String) -> Bool)?
@@ -53,6 +55,8 @@ final class FavoriteCell: UICollectionViewCell {
         return button
     }()
     
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -69,6 +73,8 @@ final class FavoriteCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Configure
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -101,6 +107,8 @@ final class FavoriteCell: UICollectionViewCell {
         loadImage(from: product.baseImage)
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         backgroundColor = DesignSystem.Colors.primary
         
@@ -119,80 +127,28 @@ final class FavoriteCell: UICollectionViewCell {
         layer.masksToBounds = false
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            imageView.heightAnchor.constraint(equalToConstant: 130),
             
-            imageView.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 12
-            ),
+            favoriteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            favoriteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 36),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 36),
             
-            imageView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 12
-            ),
+            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             
-            imageView.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -12
-            ),
-            
-            imageView.heightAnchor.constraint(
-                equalToConstant: 130
-            ),
-            
-            favoriteButton.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 8
-            ),
-            
-            favoriteButton.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -8
-            ),
-            
-            favoriteButton.widthAnchor.constraint(
-                equalToConstant: 36
-            ),
-            
-            favoriteButton.heightAnchor.constraint(
-                equalToConstant: 36
-            ),
-            
-            titleLabel.topAnchor.constraint(
-                equalTo: imageView.bottomAnchor,
-                constant: 8
-            ),
-            
-            titleLabel.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 12
-            ),
-            
-            titleLabel.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -12
-            ),
-            
-            priceLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 4
-            ),
-            
-            priceLabel.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 12
-            ),
-            
-            priceLabel.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -12
-            ),
-            
-            priceLabel.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -12
-            )
+            priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 12),
+            priceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
         ])
     }
     
@@ -217,6 +173,8 @@ final class FavoriteCell: UICollectionViewCell {
             
         }.resume()
     }
+    
+    // MARK: - Actions
     
     @objc private func favoriteButtonTapped() {
         

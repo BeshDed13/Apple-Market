@@ -80,6 +80,8 @@ final class NotificationsViewController: UIViewController {
         viewModel.loadNotifications()
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         
         navigationItem.title = "Уведомления"
@@ -95,7 +97,6 @@ final class NotificationsViewController: UIViewController {
     // MARK: - Constraints
     
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
             headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -117,6 +118,8 @@ final class NotificationsViewController: UIViewController {
             emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
+    
+    // MARK: - Setup TableView
     
     private func setupTableView() {
         
@@ -172,6 +175,8 @@ final class NotificationsViewController: UIViewController {
         )
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension NotificationsViewController: UITableViewDataSource {
     

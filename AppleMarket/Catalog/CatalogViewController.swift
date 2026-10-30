@@ -59,6 +59,8 @@ final class CatalogViewController: UIViewController {
         setupConstraints()
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI () {
         navigationItem.title = "Каталог"
         view.backgroundColor = DesignSystem.Colors.primary
@@ -109,6 +111,8 @@ final class CatalogViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource
+
 extension CatalogViewController: UICollectionViewDataSource {
 
     func collectionView(
@@ -135,6 +139,8 @@ extension CatalogViewController: UICollectionViewDataSource {
         return cell
     }
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension CatalogViewController: UICollectionViewDelegate {
 

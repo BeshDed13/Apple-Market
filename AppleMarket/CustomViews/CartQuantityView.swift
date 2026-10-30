@@ -8,6 +8,8 @@
 import UIKit
 
 final class CartQuantityView: UIView {
+    
+    // MARK: - Properties
 
     var onMinusTapped: (() -> Void)?
     var onPlusTapped: (() -> Void)?
@@ -38,6 +40,8 @@ final class CartQuantityView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    // MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,6 +53,8 @@ final class CartQuantityView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Setup UI
 
     private func setupUI() {
 
@@ -60,34 +66,18 @@ final class CartQuantityView: UIView {
         addSubview(plusButton)
 
         NSLayoutConstraint.activate([
+            minusButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            minusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            quantityLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            quantityLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            minusButton.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: 12
-            ),
-
-            minusButton.centerYAnchor.constraint(
-                equalTo: centerYAnchor
-            ),
-
-            quantityLabel.centerXAnchor.constraint(
-                equalTo: centerXAnchor
-            ),
-
-            quantityLabel.centerYAnchor.constraint(
-                equalTo: centerYAnchor
-            ),
-
-            plusButton.trailingAnchor.constraint(
-                equalTo: trailingAnchor,
-                constant: -12
-            ),
-
-            plusButton.centerYAnchor.constraint(
-                equalTo: centerYAnchor
-            )
+            plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            plusButton.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
+    
+    // MARK: - Actions
 
     private func setupActions() {
 
@@ -105,6 +95,8 @@ final class CartQuantityView: UIView {
             for: .touchUpInside
         )
     }
+    
+    // MARK: - Configure
 
     func configure(
         quantity: Int,

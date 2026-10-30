@@ -115,6 +115,8 @@ final class ProfileViewController: UIViewController {
         )
     }
     
+    // MARK: - Setup UI
+    
     private func updateUI() {
 
         switch viewModel.authState {
@@ -179,6 +181,8 @@ final class ProfileViewController: UIViewController {
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             ])
     }
+    
+    // MARK: - Actions
     
     private func setupActions() {
         authenticationView.onLoginTapped = { [weak self] in

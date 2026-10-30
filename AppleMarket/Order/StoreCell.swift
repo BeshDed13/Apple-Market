@@ -9,6 +9,8 @@ import UIKit
 
 final class StoreCell: UITableViewCell {
     
+    // MARK: - Properties
+    
     static let identifier = "StoreCell"
     
     private let nameLabel: UILabel = {
@@ -29,6 +31,8 @@ final class StoreCell: UITableViewCell {
         return imageView
     }()
     
+    // MARK: - Init
+    
     override init(
         style: UITableViewCell.CellStyle,
         reuseIdentifier: String?
@@ -45,6 +49,8 @@ final class StoreCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Configure
     
     func configure(
         with store: Store,
@@ -63,6 +69,8 @@ final class StoreCell: UITableViewCell {
             : .systemGray4
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         backgroundColor = .clear
         selectionStyle = .none
@@ -71,39 +79,19 @@ final class StoreCell: UITableViewCell {
         contentView.addSubview(checkImageView)
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: checkImageView.leadingAnchor, constant: -12),
+            nameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
-            nameLabel.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 16
-            ),
-            nameLabel.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            nameLabel.trailingAnchor.constraint(
-                equalTo: checkImageView.leadingAnchor,
-                constant: -12
-            ),
-            nameLabel.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -16
-            ),
-            
-            checkImageView.centerYAnchor.constraint(
-                equalTo: contentView.centerYAnchor
-            ),
-            checkImageView.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -16
-            ),
-            checkImageView.widthAnchor.constraint(
-                equalToConstant: 24
-            ),
-            checkImageView.heightAnchor.constraint(
-                equalToConstant: 24
-            )
+            checkImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            checkImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            checkImageView.widthAnchor.constraint(equalToConstant: 24),
+            checkImageView.heightAnchor.constraint(equalToConstant: 24)
         ])
     }
 }

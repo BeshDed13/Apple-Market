@@ -66,6 +66,8 @@ final class CategoryViewController: UIViewController {
         viewModel.loadProducts()
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         view.backgroundColor = DesignSystem.Colors.primary
         view.addSubview(collectionView)
@@ -159,6 +161,9 @@ final class CategoryViewController: UIViewController {
         )
     }
 }
+
+// MARK: - UICollectionViewDataSource
+
 extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -192,6 +197,9 @@ extension CategoryViewController: UICollectionViewDataSource {
         return cell
     }
 }
+
+// MARK: - UICollectionViewDelegate
+
 extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,

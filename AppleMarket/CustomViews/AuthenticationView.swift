@@ -9,6 +9,8 @@ import UIKit
 
 final class AuthenticationView: UIView {
     
+    // MARK: - Properties
+    
     var onLoginTapped: (() -> Void)?
     var onSignUpTapped: (() -> Void)?
     
@@ -26,6 +28,8 @@ final class AuthenticationView: UIView {
     private let loginButton = LoginButton()
     private let signUpButton = SignUpButton()
     
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -42,6 +46,8 @@ final class AuthenticationView: UIView {
         titleLabel.text = title
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         addSubview(cardView)
         
@@ -51,6 +57,8 @@ final class AuthenticationView: UIView {
         cardView.addSubview(loginButton)
         cardView.addSubview(signUpButton)
     }
+    
+    // MARK: - Constraints
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -75,6 +83,8 @@ final class AuthenticationView: UIView {
             signUpButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16)
         ])
     }
+    
+    // MARK: - Actions
     
     private func setupActions() {
         loginButton.addTarget(

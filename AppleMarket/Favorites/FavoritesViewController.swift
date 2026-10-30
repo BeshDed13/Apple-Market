@@ -11,6 +11,8 @@ final class FavoritesViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let viewModel: FavoritesViewModelProtocol
+    
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray6
@@ -36,24 +38,12 @@ final class FavoritesViewController: UIViewController {
         return label
     }()
     
-    private let viewModel: FavoritesViewModelProtocol
-    
     private lazy var collectionView: UICollectionView = {
-        let collection = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: createLayout()
-        )
-        
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collection.backgroundColor = DesignSystem.Colors.primary
         collection.translatesAutoresizingMaskIntoConstraints = false
-        
         collection.dataSource = self
-        
-        collection.register(
-            FavoriteCell.self,
-            forCellWithReuseIdentifier: FavoriteCell.identifier
-        )
-        
+        collection.register(FavoriteCell.self, forCellWithReuseIdentifier: FavoriteCell.identifier)
         return collection
     }()
     
@@ -83,6 +73,8 @@ final class FavoritesViewController: UIViewController {
         
         viewModel.loadFavorites()
     }
+    
+    // MARK: - Setup UI
     
     private func setupUI() {
         view.addSubview(collectionView)
@@ -201,6 +193,8 @@ final class FavoritesViewController: UIViewController {
         )
     }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension FavoritesViewController: UICollectionViewDataSource {
     

@@ -98,6 +98,8 @@ final class SupportViewController: UIViewController {
         viewModel.loadMessages()
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         navigationItem.title = "Поддержка"
         view.backgroundColor = DesignSystem.Colors.primary
@@ -116,93 +118,38 @@ final class SupportViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            // MARK: - Header
+            logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 64),
             
-            headerView.topAnchor.constraint(
-                equalTo: view.topAnchor
-            ),
-            headerView.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            headerView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            headerView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor),
             
-            logoImageView.centerXAnchor.constraint(
-                equalTo: headerView.centerXAnchor
-            ),
-            logoImageView.centerYAnchor.constraint(
-                equalTo: headerView.centerYAnchor
-            ),
-            logoImageView.heightAnchor.constraint(
-                equalToConstant: 64
-            ),
+            inputContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            inputContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            inputContainerView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -8),
+            inputContainerView.heightAnchor.constraint(equalToConstant: 50),
             
-            // MARK: - Table
+            messageTextField.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+            messageTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor),
+            messageTextField.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
+            messageTextField.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -8),
             
-            tableView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            tableView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            ),
-            tableView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            tableView.bottomAnchor.constraint(
-                equalTo: inputContainerView.topAnchor
-            ),
-            
-            // MARK: - Input
-            
-            inputContainerView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 12
-            ),
-            inputContainerView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -12
-            ),
-            inputContainerView.bottomAnchor.constraint(
-                equalTo: view.keyboardLayoutGuide.topAnchor,
-                constant: -8
-            ),
-            inputContainerView.heightAnchor.constraint(
-                equalToConstant: 50
-            ),
-            
-            messageTextField.leadingAnchor.constraint(
-                equalTo: inputContainerView.leadingAnchor
-            ),
-            messageTextField.topAnchor.constraint(
-                equalTo: inputContainerView.topAnchor
-            ),
-            messageTextField.bottomAnchor.constraint(
-                equalTo: inputContainerView.bottomAnchor
-            ),
-            messageTextField.trailingAnchor.constraint(
-                equalTo: sendButton.leadingAnchor,
-                constant: -8
-            ),
-            
-            sendButton.trailingAnchor.constraint(
-                equalTo: inputContainerView.trailingAnchor
-            ),
-            sendButton.centerYAnchor.constraint(
-                equalTo: inputContainerView.centerYAnchor
-            ),
-            sendButton.widthAnchor.constraint(
-                equalToConstant: 42
-            ),
-            sendButton.heightAnchor.constraint(
-                equalToConstant: 42
-            )
+            sendButton.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            sendButton.centerYAnchor.constraint(equalTo: inputContainerView.centerYAnchor),
+            sendButton.widthAnchor.constraint(equalToConstant: 42),
+            sendButton.heightAnchor.constraint(equalToConstant: 42)
         ])
     }
+    
+    // MARK: - Setup TableView
     
     private func setupTableView() {
         tableView.delegate = self
@@ -212,6 +159,8 @@ final class SupportViewController: UIViewController {
             forCellReuseIdentifier: SupportMessageCell.identifier
         )
     }
+    
+    // MARK: - Actions
     
     private func setupActions() {
         sendButton.addTarget(
@@ -293,6 +242,9 @@ final class SupportViewController: UIViewController {
         present(alert, animated: true)
     }
 }
+
+// MARK: - UITableViewDataSource
+
 extension SupportViewController: UITableViewDataSource {
     
     func tableView(
@@ -321,6 +273,9 @@ extension SupportViewController: UITableViewDataSource {
         return cell
     }
 }
+
+// MARK: - UITableViewDelegate
+
 extension SupportViewController: UITableViewDelegate {
     
     func tableView(
@@ -330,6 +285,9 @@ extension SupportViewController: UITableViewDelegate {
         UITableView.automaticDimension
     }
 }
+
+// MARK: - UITextFieldDelegate
+
 extension SupportViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(

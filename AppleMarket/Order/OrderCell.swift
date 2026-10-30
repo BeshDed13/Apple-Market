@@ -9,6 +9,8 @@ import UIKit
 
 final class OrderCell: UITableViewCell {
     
+    // MARK: - Properties
+    
     static let identifier = "OrderCell"
     
     private let containerView: UIView = {
@@ -66,6 +68,8 @@ final class OrderCell: UITableViewCell {
         return label
     }()
     
+    // MARK: - Init
+    
     override init(
         style: UITableViewCell.CellStyle,
         reuseIdentifier: String?
@@ -82,6 +86,8 @@ final class OrderCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Configure
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -115,6 +121,8 @@ final class OrderCell: UITableViewCell {
         statusLabel.textColor = statusColor(for: order.status)
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         
         backgroundColor = .clear
@@ -136,74 +144,31 @@ final class OrderCell: UITableViewCell {
         layer.shadowOffset = DesignSystem.Shadow.offset
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
             
-            containerView.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 6
-            ),
-            containerView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            containerView.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -16
-            ),
-            containerView.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -6
-            ),
+            orderNumberLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 14),
+            orderNumberLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             
-            orderNumberLabel.topAnchor.constraint(
-                equalTo: containerView.topAnchor,
-                constant: 14
-            ),
-            orderNumberLabel.leadingAnchor.constraint(
-                equalTo: containerView.leadingAnchor,
-                constant: 16
-            ),
+            statusLabel.centerYAnchor.constraint(equalTo: orderNumberLabel.centerYAnchor),
+            statusLabel.leadingAnchor.constraint(greaterThanOrEqualTo: orderNumberLabel.trailingAnchor, constant: 8),
+            statusLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             
-            statusLabel.centerYAnchor.constraint(
-                equalTo: orderNumberLabel.centerYAnchor
-            ),
-            statusLabel.leadingAnchor.constraint(
-                greaterThanOrEqualTo: orderNumberLabel.trailingAnchor,
-                constant: 8
-            ),
-            statusLabel.trailingAnchor.constraint(
-                equalTo: containerView.trailingAnchor,
-                constant: -16
-            ),
+            dateLabel.topAnchor.constraint(equalTo: orderNumberLabel.bottomAnchor, constant: 5),
+            dateLabel.leadingAnchor.constraint(equalTo: orderNumberLabel.leadingAnchor),
             
-            dateLabel.topAnchor.constraint(
-                equalTo: orderNumberLabel.bottomAnchor,
-                constant: 5
-            ),
-            dateLabel.leadingAnchor.constraint(
-                equalTo: orderNumberLabel.leadingAnchor
-            ),
+            itemsLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 4),
+            itemsLabel.leadingAnchor.constraint(equalTo: orderNumberLabel.leadingAnchor),
             
-            itemsLabel.topAnchor.constraint(
-                equalTo: dateLabel.bottomAnchor,
-                constant: 4
-            ),
-            itemsLabel.leadingAnchor.constraint(
-                equalTo: orderNumberLabel.leadingAnchor
-            ),
-            
-            priceLabel.topAnchor.constraint(
-                equalTo: itemsLabel.bottomAnchor,
-                constant: 10
-            ),
-            priceLabel.leadingAnchor.constraint(
-                equalTo: orderNumberLabel.leadingAnchor
-            ),
-            priceLabel.bottomAnchor.constraint(
-                equalTo: containerView.bottomAnchor,
-                constant: -14
+            priceLabel.topAnchor.constraint(equalTo: itemsLabel.bottomAnchor, constant: 10),
+            priceLabel.leadingAnchor.constraint(equalTo: orderNumberLabel.leadingAnchor),
+            priceLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -14
             )
         ])
     }

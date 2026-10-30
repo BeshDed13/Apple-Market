@@ -9,6 +9,8 @@ import UIKit
 
 final class AvatarCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    
     private let imageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -17,6 +19,8 @@ final class AvatarCell: UICollectionViewCell {
         iv.layer.cornerRadius = 20
         return iv
     }()
+    
+    // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,6 +42,8 @@ final class AvatarCell: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    // MARK: - Configure
     
     func configure(with avatar: Avatar) {
         imageView.image = avatar.image

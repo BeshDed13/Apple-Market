@@ -9,6 +9,8 @@ import UIKit
 
 final class CartCell: UITableViewCell {
     
+    // MARK: - Properties
+    
     static let reuseIdentifier = "CartCell"
     
     var onIncreaseTapped: (() -> Void)?
@@ -86,6 +88,8 @@ final class CartCell: UITableViewCell {
         return stack
     }()
     
+    // MARK: - Init
+    
     override init(
         style: UITableViewCell.CellStyle,
         reuseIdentifier: String?
@@ -117,6 +121,8 @@ final class CartCell: UITableViewCell {
         onDecreaseTapped = nil
     }
     
+    // MARK: - Configure
+    
     func configure(
         with item: CartProduct,
         imageLoader: ImageLoaderProtocol
@@ -146,6 +152,8 @@ final class CartCell: UITableViewCell {
         }
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         backgroundColor = DesignSystem.Colors.primary
         selectionStyle = .none
@@ -160,79 +168,42 @@ final class CartCell: UITableViewCell {
         layer.shadowOpacity = DesignSystem.Shadow.opacity
         layer.shadowRadius = DesignSystem.Shadow.radius
         layer.shadowOffset = DesignSystem.Shadow.offset
-    }
-    
-    private func setupConstraints() {
         
         contentView.addSubview(productImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(attributesLabel)
         contentView.addSubview(priceLabel)
         contentView.addSubview(quantityStack)
-        
+    }
+    
+    // MARK: - Constraints
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
+            productImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            productImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            productImageView.widthAnchor.constraint(equalToConstant: 100),
+            productImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            productImageView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 12
-            ),
-            productImageView.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 12
-            ),
-            productImageView.widthAnchor.constraint(
-                equalToConstant: 100
-            ),
-            productImageView.heightAnchor.constraint(
-                equalToConstant: 100
-            ),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            titleLabel.leadingAnchor.constraint(equalTo: productImageView.trailingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             
-            titleLabel.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 12
-            ),
-            titleLabel.leadingAnchor.constraint(
-                equalTo: productImageView.trailingAnchor,
-                constant: 12
-            ),
-            titleLabel.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -12
-            ),
+            attributesLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
+            attributesLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            attributesLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            attributesLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 6
-            ),
-            attributesLabel.leadingAnchor.constraint(
-                equalTo: titleLabel.leadingAnchor
-            ),
-            attributesLabel.trailingAnchor.constraint(
-                equalTo: titleLabel.trailingAnchor
-            ),
+            priceLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             
-            priceLabel.leadingAnchor.constraint(
-                equalTo: titleLabel.leadingAnchor
-            ),
-            priceLabel.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -12
-            ),
+            quantityStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            quantityStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
-            quantityStack.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -12
-            ),
-            quantityStack.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -8
-            ),
-            
-            contentView.heightAnchor.constraint(
-                equalToConstant: 130
-            )
+            contentView.heightAnchor.constraint(equalToConstant: 130)
         ])
     }
+    
+    // MARK: - Actions
     
     private func setupActions() {
         

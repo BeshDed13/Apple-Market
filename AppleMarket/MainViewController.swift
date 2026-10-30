@@ -65,6 +65,8 @@ final class MainViewController: UIViewController {
         setupConstraints()
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI () {
         navigationItem.title = "Главная"
         view.backgroundColor = DesignSystem.Colors.primary

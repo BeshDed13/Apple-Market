@@ -16,7 +16,6 @@ final class SignUpViewController: UIViewController {
     private let viewModel: SignUpViewModelProtocol
     
     private var selectedAvatar: Avatar?
-    
     private let nameTextField = CustomTextField()
     private let emailTextField = CustomTextField()
     private let passwordTextField = CustomTextField()
@@ -102,6 +101,8 @@ final class SignUpViewController: UIViewController {
             self?.onSignUpSuccess?()
         }
     }
+    
+    // MARK: - Setup UI
     
     private func setupUI() {
         navigationItem.title = "Зарегистрироваться"

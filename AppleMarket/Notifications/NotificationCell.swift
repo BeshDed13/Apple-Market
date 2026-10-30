@@ -9,6 +9,8 @@ import UIKit
 
 final class NotificationCell: UITableViewCell {
     
+    // MARK: - Properties
+    
     static let identifier = "NotificationCell"
     
     private let containerView: UIView = {
@@ -71,6 +73,8 @@ final class NotificationCell: UITableViewCell {
         return view
     }()
     
+    // MARK: - Init
+    
     override init(
         style: UITableViewCell.CellStyle,
         reuseIdentifier: String?
@@ -87,6 +91,8 @@ final class NotificationCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Configure
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -115,6 +121,8 @@ final class NotificationCell: UITableViewCell {
         )
     }
     
+    // MARK: - Setup UI
+    
     private func setupUI() {
         backgroundColor = DesignSystem.Colors.primary
         selectionStyle = .none
@@ -134,93 +142,36 @@ final class NotificationCell: UITableViewCell {
         layer.shadowOffset = DesignSystem.Shadow.offset
     }
     
+    // MARK: - Constraints
+    
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            containerView.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 6
-            ),
-            containerView.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -6
-            ),
-            containerView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            containerView.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -16
-            ),
+            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 14),
+            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            iconView.widthAnchor.constraint(equalToConstant: 24),
+            iconView.heightAnchor.constraint(equalToConstant: 24),
             
-            iconView.leadingAnchor.constraint(
-                equalTo: containerView.leadingAnchor,
-                constant: 14
-            ),
-            iconView.topAnchor.constraint(
-                equalTo: containerView.topAnchor,
-                constant: 16
-            ),
-            iconView.widthAnchor.constraint(
-                equalToConstant: 24
-            ),
-            iconView.heightAnchor.constraint(
-                equalToConstant: 24
-            ),
+            unreadView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            unreadView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            unreadView.widthAnchor.constraint(equalToConstant: 8),
+            unreadView.heightAnchor.constraint(equalToConstant: 8),
             
-            unreadView.topAnchor.constraint(
-                equalTo: containerView.topAnchor,
-                constant: 10
-            ),
-            unreadView.trailingAnchor.constraint(
-                equalTo: containerView.trailingAnchor,
-                constant: -10
-            ),
-            unreadView.widthAnchor.constraint(
-                equalToConstant: 8
-            ),
-            unreadView.heightAnchor.constraint(
-                equalToConstant: 8
-            ),
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: dateLabel.leadingAnchor, constant: -8),
             
-            titleLabel.topAnchor.constraint(
-                equalTo: containerView.topAnchor,
-                constant: 12
-            ),
-            titleLabel.leadingAnchor.constraint(
-                equalTo: iconView.trailingAnchor,
-                constant: 12
-            ),
-            titleLabel.trailingAnchor.constraint(
-                equalTo: dateLabel.leadingAnchor,
-                constant: -8
-            ),
+            dateLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
+            dateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
             
-            dateLabel.topAnchor.constraint(
-                equalTo: containerView.topAnchor,
-                constant: 12
-            ),
-            dateLabel.trailingAnchor.constraint(
-                equalTo: containerView.trailingAnchor,
-                constant: -12
-            ),
-            
-            messageLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 4
-            ),
-            messageLabel.leadingAnchor.constraint(
-                equalTo: titleLabel.leadingAnchor
-            ),
-            messageLabel.trailingAnchor.constraint(
-                equalTo: containerView.trailingAnchor,
-                constant: -12
-            ),
-            messageLabel.bottomAnchor.constraint(
-                lessThanOrEqualTo: containerView.bottomAnchor,
-                constant: -10
+            messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            messageLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            messageLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
+            messageLabel.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -10
             )
         ])
     }

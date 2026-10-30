@@ -15,23 +15,16 @@ final class AvatarViewController: UIViewController {
     private let completion: (Avatar) -> Void
     
     private lazy var collectionView: UICollectionView = {
-        
         let layout = UICollectionViewFlowLayout()
-        
         layout.minimumLineSpacing = 16
         layout.minimumInteritemSpacing = 16
         
         let collectionView = UICollectionView(frame: .zero,collectionViewLayout: layout)
-        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(
-            AvatarCell.self,
-            forCellWithReuseIdentifier: "AvatarCell"
-        )
-        
+        collectionView.register(AvatarCell.self, forCellWithReuseIdentifier: "AvatarCell")
         return collectionView
     }()
     
@@ -86,6 +79,8 @@ final class AvatarViewController: UIViewController {
             height: itemWidth
         )
     }
+    
+    // MARK: - Setup UI
     
     private func setupUI() {
         view.backgroundColor = DesignSystem.Colors.primary
